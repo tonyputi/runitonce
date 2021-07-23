@@ -34,11 +34,12 @@ RUN if [ ${UID:-0} -ne 0 ] && [ ${GID:-0} -ne 0 ]; then \
 	&& adduser www-data www-data \
 ;fi
 
+COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
 # turn on app scheduler
 RUN echo "* * * * * cd /app && php artisan schedule:run >> /dev/null 2>&1" > /etc/crontabs/www-data
 
 WORKDIR /app
 
-COPY ./docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
