@@ -12,7 +12,7 @@ services:
         working_dir: /app
         volumes:
             - ./src:/app
-            - ./docker/php/supervisor.ini:/etc/supervisor.d/runitonce.ini
+            # - ./docker/php/supervisor.ini:/etc/supervisor.d/runitonce.ini
         # environment:
             # XDEBUG_MODE: debug
         # depends_on: [nginx, 'redis', 'mariadb', 'selenium']
