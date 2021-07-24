@@ -32,7 +32,7 @@ class WalletCreateTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->postJson('/api/wallet', [
                 'name' => 'My wallet 1',
                 'is_active' => true
@@ -59,7 +59,7 @@ class WalletCreateTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->admin, 'api')
             ->postJson('/api/wallet', [
                 'user_id' => $user->id,
                 'name' => 'My wallet 2',

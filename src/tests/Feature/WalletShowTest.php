@@ -34,7 +34,7 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(200)
@@ -58,7 +58,7 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->admin, 'api')
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(200)
@@ -82,7 +82,7 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create();
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(403);

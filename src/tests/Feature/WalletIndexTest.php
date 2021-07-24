@@ -34,7 +34,7 @@ class WalletIndexTest extends TestCase
         $user = User::factory()->create();
         Wallet::factory(3)->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->getJson('/api/wallet');
 
         $response->assertStatus(200)
@@ -63,7 +63,7 @@ class WalletIndexTest extends TestCase
         });
         
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->admin, 'api')
             ->getJson('/api/wallet');
 
         $response->assertStatus(200)

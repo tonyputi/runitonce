@@ -36,7 +36,7 @@ class WalletUpdateTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My brand new wallet',
                 'is_active' => true
@@ -66,7 +66,7 @@ class WalletUpdateTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->admin, 'api')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My second brand new wallet',
                 'is_active' => false
@@ -96,7 +96,7 @@ class WalletUpdateTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create();
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My third brand new wallet',
                 'is_active' => false

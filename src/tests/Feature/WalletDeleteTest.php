@@ -34,7 +34,7 @@ class WalletDeleteTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->deleteJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(204);
@@ -50,7 +50,7 @@ class WalletDeleteTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->admin, 'api')
             ->deleteJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(204);
@@ -66,7 +66,7 @@ class WalletDeleteTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create();
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($user, 'api')
             ->deleteJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(403);
