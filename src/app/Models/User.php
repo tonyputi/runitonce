@@ -29,7 +29,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     /**
@@ -38,6 +38,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'is_admin' => 'boolean',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The walletes own by the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class);
+    }
 }
