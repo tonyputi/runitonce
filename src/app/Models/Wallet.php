@@ -5,10 +5,23 @@ namespace App\Models;
 use App\Casts\Cents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Wallet extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'user_id',
+        'amount',
+        'is_active'
+    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -16,6 +29,7 @@ class Wallet extends Model
      * @var array
      */
     protected $casts = [
+        'user_id' => 'integer',
         'balance' => Cents::class,
         'is_active' => 'boolean',
     ];

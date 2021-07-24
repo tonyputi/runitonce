@@ -20,6 +20,7 @@ class CreateWalletsTable extends Migration
             $table->unsignedDecimal('balance')->default(0);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
