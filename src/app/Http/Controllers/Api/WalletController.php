@@ -31,8 +31,10 @@ class WalletController extends Controller
         $user = $request->user();
         
         $query = Wallet::query();
-        $query->when(!$user->is_admin, fn ($query) => $query->where('user_id', $request->user()->id));
         $query->when($user->is_admin, fn ($query) => $query->with('user'));
+        $query->when($user->is_admin and $request->user, fn($query) => $query->where('user_id', $request->user));
+        $query->when(!$user->is_admin, fn ($query) => $query->where('user_id', $request->user()->id));
+        
         $query->when($request->filled('search'), function ($query) use($request) {
             $query->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->search}%");

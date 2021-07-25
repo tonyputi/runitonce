@@ -23,7 +23,11 @@ class DeleteAccountTest extends TestCase
             'password' => 'password',
         ]);
 
-        $this->assertNull($user->fresh());
+        if (in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($user))) {
+            $this->assertTrue($user->fresh()->trashed());
+        } else {
+            $this->assertNull($user->fresh());
+        }
     }
 
     public function test_correct_password_must_be_provided_before_account_can_be_deleted()

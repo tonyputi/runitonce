@@ -15,7 +15,9 @@ services:
             # - ./docker/php/supervisor.ini:/etc/supervisor.d/runitonce.ini
         # environment:
             # XDEBUG_MODE: debug
-        # depends_on: [nginx, 'redis', 'mariadb', 'selenium']
+            # XDEBUG_CONFIG: start_with_request=yes discover_client_host=yes log=/tmp/xdebug.log
+            # XDEBUG_SESSION: runitonce
+        depends_on: [nginx, 'redis', 'mariadb', 'selenium']
     nginx:
         image: nginx:alpine
         container_name: runitonce-www
@@ -42,10 +44,10 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
             - 'runitonce-db:/var/lib/mysql'
-        # healthcheck:
-        #     test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-        #     retries: 3
-        #     timeout: 5s
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+            retries: 3
+            timeout: 5s
     redis:
         image: 'redis:alpine'
         container_name: runitonce-redis

@@ -22,6 +22,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678')
         ]);
 
+        $user = User::factory()->create([
+            'name' => 'Standard user',
+            'email' => 'user@runitonce.com',
+            'password' => Hash::make('12345678')
+        ]);
+        Wallet::factory(3)->for($user)->create();
+
+
         Wallet::factory(30)->create();
     }
 }

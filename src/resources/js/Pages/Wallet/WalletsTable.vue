@@ -130,7 +130,12 @@
                     }
                 }
 
-                axios.get(route('api.wallet.index'), config).then((response) => {
+                let _route = route('api.wallet.index')
+                if (route().params.user) {
+                    _route = route('api.users.wallets.index', [route().params.user])
+                }
+                
+                axios.get(_route, config).then((response) => {
                     this.wallets = response.data.data
                     this.meta = response.data.meta
                 })

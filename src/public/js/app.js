@@ -29461,7 +29461,14 @@ __webpack_require__.r(__webpack_exports__);
           search: this.search
         }
       };
-      axios.get(route('api.wallet.index'), config).then(function (response) {
+
+      var _route = route('api.wallet.index');
+
+      if (route().params.user) {
+        _route = route('api.users.wallets.index', [route().params.user]);
+      }
+
+      axios.get(_route, config).then(function (response) {
         _this.wallets = response.data.data;
         _this.meta = response.data.meta;
       });
