@@ -39,7 +39,7 @@ class WalletController extends Controller
             $query->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->search}%");
                 $query->orWHereHas('user', function ($query) use ($request) {
-                    $query->where('email', 'like', "%{$request->search}%");
+                    $query->where('name', 'like', "%{$request->search}%");
                     $query->orWhere('email', 'like', "%{$request->search}%");
                 });
             });

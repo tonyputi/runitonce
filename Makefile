@@ -1,5 +1,6 @@
 UID := $(shell id -u)
 GID := $(shell id -g)
+CONTAINER := "runitonce-php"
 
 build:
 	$(info Make: Building environment image.)
@@ -21,14 +22,18 @@ restart:
 
 init:
 	$(info Make: Initializing environment.)
-	docker exec -u www-data runitonce-php cp .env.example .env
-	docker exec -u www-data runitonce-php composer install
-	docker exec -u www-data runitonce-php php artisan migrate:refresh --seed
-	docker exec -u www-data runitonce-php php artisan key:generate
+	docker exec -u www-data $(CONTAINER) cp .env.example .env
+	docker exec -u www-data $(CONTAINER) composer install
+	docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed
+	docker exec -u www-data $(CONTAINER) php artisan key:generate
 
 test:
 	$(info Make: Starting environment tests.)
-	docker exec -u www-data runitonce-php php artisan test
+	docker exec -u www-data $(CONTAINER) php artisan test
+
+shell:
+	$(info Make: Starting environment shell.)
+	docker exec -u www-data -it $(CONTAINER) sh
 
 push:
 	$(info Make: Pushing tagged image.)
