@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,10 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory()->admin()->create([
+        User::factory()->admin()->create([
             'name' => 'Admin user',
             'email' => 'admin@runitonce.com',
             'password' => Hash::make('12345678')
         ]);
+
+        Wallet::factory(10)->create();
     }
 }

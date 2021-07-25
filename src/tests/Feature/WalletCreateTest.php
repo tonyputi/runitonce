@@ -32,21 +32,22 @@ class WalletCreateTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user)
             ->postJson('/api/wallet', [
                 'name' => 'My wallet 1',
                 'is_active' => true
             ]);
 
         $response->assertStatus(201)
-            ->assertJson(['user_id' => $user->id])
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 
@@ -59,7 +60,7 @@ class WalletCreateTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($this->admin, 'api')
+        $response = $this->actingAs($this->admin)
             ->postJson('/api/wallet', [
                 'user_id' => $user->id,
                 'name' => 'My wallet 2',
@@ -67,14 +68,15 @@ class WalletCreateTest extends TestCase
             ]);
 
         $response->assertStatus(201)
-            ->assertJson(['user_id' => $user->id])
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 }

@@ -25,7 +25,7 @@ class WalletFactory extends Factory
         return [
             'user_id' => fn (array $attributes) => User::factory()->create(),
             'name' => $this->faker->numerify('Wallet ###'),
-            'balance' => $this->faker->numberBetween(100, 50000),
+            'balance' => $this->faker->numberBetween(1, 500),
             'is_active' => true
         ];
     }

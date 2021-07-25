@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WalletStoreRequest;
 use App\Http\Requests\WalletUpdateRequest;
+use App\Http\Resources\WalletResource;
 
 class WalletController extends Controller
 {
@@ -29,8 +30,12 @@ class WalletController extends Controller
     {
         $user = $request->user();
         
-        return Wallet::when(!$user->is_admin, fn ($query) => $query->where('user_id', $request->user()->id))
-            ->get();
+        $query = Wallet::query();
+        $query->when(!$user->is_admin, fn ($query) => $query->where('user_id', $request->user()->id));
+        $query->when($user->is_admin, fn ($query) => $query->with('user'));
+        $collection = $query->get();
+
+        return WalletResource::collection($collection);
     }
 
     /**
@@ -43,11 +48,13 @@ class WalletController extends Controller
     {
         $user = $request->user();
 
-        return Wallet::create([
+        $resource = Wallet::create([
             'user_id' => $user->is_admin ? $request->input('user_id', $user->id) : $user->id,
             'name' => $request->name,
             'is_active' => $request->is_active
         ])->refresh();
+
+        return new WalletResource($resource);
     }
 
     /**
@@ -56,9 +63,13 @@ class WalletController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Wallet $wallet)
+    public function show(Request $request, Wallet $wallet)
     {
-        return $wallet;
+        if ($request->user()->is_admin) {
+            $wallet->load('user');
+        }
+
+        return new WalletResource($wallet);
     }
 
     /**
@@ -76,7 +87,7 @@ class WalletController extends Controller
 
         $wallet->update($data);
 
-        return $wallet;
+        return new WalletResource($wallet);
     }
 
     /**

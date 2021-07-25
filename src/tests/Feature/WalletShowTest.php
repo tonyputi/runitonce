@@ -34,17 +34,19 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user)
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 
@@ -58,17 +60,19 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($this->admin, 'api')
+        $response = $this->actingAs($this->admin)
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 
@@ -82,7 +86,7 @@ class WalletShowTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create();
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user)
             ->getJson("/api/wallet/{$wallet->id}");
 
         $response->assertStatus(403);

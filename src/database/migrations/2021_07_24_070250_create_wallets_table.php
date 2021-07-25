@@ -17,7 +17,7 @@ class CreateWalletsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('name');
-            $table->unsignedDecimal('balance')->default(0);
+            $table->unsignedBigInteger('balance')->default(0);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();

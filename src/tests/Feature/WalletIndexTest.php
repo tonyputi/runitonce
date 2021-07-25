@@ -34,19 +34,21 @@ class WalletIndexTest extends TestCase
         $user = User::factory()->create();
         Wallet::factory(3)->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user)
             ->getJson('/api/wallet');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3)
+            ->assertJsonCount(3, 'data')
             ->assertJsonStructure([
-                '*' => [
-                    'id',
-                    'name',
-                    'balance',
-                    'is_active',
-                    'created_at',
-                    'updated_at'
+                'data' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'balance',
+                        'is_active',
+                        'created_at',
+                        'updated_at'
+                    ]
                 ]
             ]);
     }
@@ -62,20 +64,22 @@ class WalletIndexTest extends TestCase
             Wallet::factory(3)->create(['user_id' => $user->id]);
         });
         
-
-        $response = $this->actingAs($this->admin, 'api')
+        $response = $this->actingAs($this->admin)
             ->getJson('/api/wallet');
 
         $response->assertStatus(200)
-            ->assertJsonCount(6)
+            ->assertJsonCount(6, 'data')
             ->assertJsonStructure([
-                '*' => [
-                    'id',
-                    'name',
-                    'balance',
-                    'is_active',
-                    'created_at',
-                    'updated_at'
+                'data' => [
+                    '*' => [
+                        'id',
+                        'user' => ['id', 'name'],
+                        'name',
+                        'balance',
+                        'is_active',
+                        'created_at',
+                        'updated_at'
+                    ]
                 ]
             ]);
     }

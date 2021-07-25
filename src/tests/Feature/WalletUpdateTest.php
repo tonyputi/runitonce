@@ -36,21 +36,23 @@ class WalletUpdateTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user, 'sanctum')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My brand new wallet',
                 'is_active' => true
             ]);
 
         $response->assertStatus(200)
-            ->assertJson(['name' => 'My brand new wallet'])
+            ->assertJsonFragment(['name' => 'My brand new wallet'])
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 
@@ -66,23 +68,23 @@ class WalletUpdateTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($this->admin, 'api')
+        $response = $this->actingAs($this->admin, 'sanctum')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My second brand new wallet',
                 'is_active' => false
             ]);
 
         $response->assertStatus(200)
-            ->assertJson([
-                'name' => 'My second brand new wallet'
-            ])
+            ->assertJsonFragment(['name' => 'My second brand new wallet'])
             ->assertJsonStructure([
-                'id',
-                'name',
-                'balance',
-                'is_active',
-                'created_at',
-                'updated_at'
+                'data' => [
+                    'id',
+                    'name',
+                    'balance',
+                    'is_active',
+                    'created_at',
+                    'updated_at'
+                ]
             ]);
     }
 
@@ -96,7 +98,7 @@ class WalletUpdateTest extends TestCase
         $user = User::factory()->create();
         $wallet = Wallet::factory()->create();
 
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user, 'sanctum')
             ->putJson("/api/wallet/{$wallet->id}", [
                 'name' => 'My third brand new wallet',
                 'is_active' => false
