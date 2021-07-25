@@ -16,11 +16,13 @@ use App\Http\Controllers\Api\WalletController;
 |
 */
 
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('users.wallets', WalletController::class)->shallow();
-    Route::apiResource('wallet', WalletController::class);
+    Route::apiResource('users', UserController::class, ['as' => 'api']);
+    Route::apiResource('users.wallets', WalletController::class, ['as' => 'api'])->shallow();
+    Route::apiResource('wallet', WalletController::class, ['as' => 'api']);
 });
+

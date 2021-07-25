@@ -1,7 +1,11 @@
 <template>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex my-4">
-            <jet-search-input v-model="search" @input="fetch(1)" placeholder="Search user" />
+            <jet-search-input v-model="search" @input="fetch(1)" placeholder="Search wallet" />
+
+            <jet-link-button class="ml-4" :href="route('wallets.create')">
+                Create
+            </jet-link-button>
         </div>
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -12,39 +16,40 @@
                             <jet-checkbox v-model:checked="selectAll" />
                         </th>
                         <th class="p-3 text-left">ID</th>
+                        <th class="p-3 text-left" v-if="$page.props.user.is_admin">User</th>
                         <th class="p-3 text-left">Name</th>
-                        <th class="p-3 text-left">Email</th>
-                        <th class="p-3">Is admin</th>
-                        <th class="p-3">Wallets</th>
+                        <th class="p-3 text-left">Balance</th>
+                        <th class="p-3">Is active</th>
                         <th class="p-3">Updated at</th>
                         <th class="p-3"></th>
                     </tr>
                 </template>
 
                 <template #body>
-                    <tr v-for="user in users" :key="user.id" class="border border-black-600">
+                    <tr v-for="wallet in wallets" :key="wallet.id" class="border border-black-600">
                         <td class="px-2 py-4 text-center">
-                            <jet-checkbox :value="user" v-model:checked="collectionSelected" />
+                            <jet-checkbox :value="wallet" v-model:checked="collectionSelected" />
                         </td>
-                        <td class="p-3 text-left">{{ user.id }}</td>
-                        <td class="p-3 text-left">{{ user.name }}</td>
-                        <td class="p-3 text-left">{{ user.email }}</td>
-                        <td class="p-3 text-center">{{ user.is_admin ? 'Yes' : 'No' }}</td>
+                        <td class="p-3 text-left">{{ wallet.id }}</td>
+                        <td class="p-3" v-if="$page.props.user.is_admin">
+                            <jet-nav-link :href="route('users.show', [wallet.user.id])" v-if="wallet.user">
+                                {{ wallet.user.name }}
+                            </jet-nav-link>
+                            <span v-else>-</span>
+                        </td>
+                        <td class="p-3">{{ wallet.name }}</td>
+                        <td class="p-3">€ {{ wallet.balance }}</td>
                         <td class="p-3 text-center">
-                            <inertia-link :href="route('users.wallets.index', [user.id])">
-                                <jet-badge>{{ user.wallets_count }}</jet-badge>
-                            </inertia-link>
+                            <jet-checkbox name="is_active" v-model:checked="wallet.is_active" @change="updateWallet(wallet)" />
                         </td>
-                        <td class="p-3 text-center">{{ user.updated_at }}</td>
+                        <td class="p-3 text-center">{{ wallet.updated_at }}</td>
                         <td class="p-3">
                             <div class="inline-flex items-center">
-                                <inertia-link  v-if="canView(user)"
-                                    :href="route('users.show', user.id)"
+                                <inertia-link :href="route('wallets.show', wallet.id)"
                                     class="inline-flex cursor-pointer text-70 hover:text-primary mr-3">
                                     <EyeIcon class="h-6 w-6" />
                                 </inertia-link >
-                                <button v-if="canDelete(user)"
-                                    @click="resourceBeingDeleted=user"
+                                <button @click="resourceBeingDeleted=wallet"
                                     class="inline-flex appearance-none cursor-pointer hover:text-primary mr-3">
                                     <TrashIcon class="h-6 w-6" />
                                 </button>
@@ -71,6 +76,8 @@
     import JetPagination from '@/Jetstream/Pagination'
     import JetBadge from '@/Jetstream/Badge'
     import JetCheckbox from '@/Jetstream/Checkbox'
+    import JetNavLink from '@/Jetstream/NavLink'
+    import JetLinkButton from '@/Jetstream/LinkButton'
     import DeleteResourceModal from './DeleteResourceModal';
     import { EyeIcon, TrashIcon } from '@heroicons/vue/outline'
 
@@ -81,6 +88,8 @@
             JetTable,
             JetPagination,
             JetCheckbox,
+            JetNavLink,
+            JetLinkButton,
             JetBadge,
             EyeIcon,
             TrashIcon,
@@ -89,7 +98,7 @@
 
         data() {
             return {
-                users: [],
+                wallets: [],
                 meta: null,
                 search: null,
                 resourceBeingDeleted: null,
@@ -104,10 +113,10 @@
         computed: {
             selectAll: {
                 get() {
-                    return this.users ? this.collectionSelected.length == this.users.length : false;
+                    return this.wallets ? this.collectionSelected.length == this.wallets.length : false;
                 },
                 set(value) {
-                    (value) ? this.collectionSelected = this.users : this.collectionSelected = [];
+                    (value) ? this.collectionSelected = this.wallets : this.collectionSelected = [];
                 }
             }
         },
@@ -121,18 +130,16 @@
                     }
                 }
 
-                axios.get(this.route('api.users.index'), config).then((response) => {
-                    this.users = response.data.data
+                axios.get(route('api.wallet.index'), config).then((response) => {
+                    this.wallets = response.data.data
                     this.meta = response.data.meta
                 })
             },
-
-            canView(user) {
-                return this.$page.props.user.is_admin || this.$page.props.user.id == user.id
-            },
-
-            canDelete(user) {
-                return this.$page.props.user.is_admin || this.$page.props.user.id == user.id
+            updateWallet(wallet) {
+                axios.put(route('api.wallet.update', [wallet.id]), wallet).then(response => {
+                    // show banner
+                });
+                
             }
         }
     }

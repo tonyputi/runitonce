@@ -25,7 +25,9 @@ class WalletStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'is_active' => 'boolean',
+            'user_id' => 'sometimes|numeric',
+            'balance' => 'sometimes|required|numeric',
+            'is_active' => 'required|boolean',
         ];
     }
 }

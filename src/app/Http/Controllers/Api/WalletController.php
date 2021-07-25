@@ -33,7 +33,17 @@ class WalletController extends Controller
         $query = Wallet::query();
         $query->when(!$user->is_admin, fn ($query) => $query->where('user_id', $request->user()->id));
         $query->when($user->is_admin, fn ($query) => $query->with('user'));
-        $collection = $query->get();
+        $query->when($request->filled('search'), function ($query) use($request) {
+            $query->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->search}%");
+                $query->orWHereHas('user', function ($query) use ($request) {
+                    $query->where('email', 'like', "%{$request->search}%");
+                    $query->orWhere('email', 'like', "%{$request->search}%");
+                });
+            });
+        });
+        $query->orderBy('id', 'desc');
+        $collection = $request->has('page') ? $query->paginate() : $query->get();
 
         return WalletResource::collection($collection);
     }
@@ -48,13 +58,17 @@ class WalletController extends Controller
     {
         $user = $request->user();
 
-        $resource = Wallet::create([
-            'user_id' => $user->is_admin ? $request->input('user_id', $user->id) : $user->id,
-            'name' => $request->name,
-            'is_active' => $request->is_active
-        ])->refresh();
+        $wallet = new Wallet;
+        $wallet->name = $request->name;
+        $wallet->is_active = $request->is_active;
+        if ($user->is_admin and $request->has('balance')) {
+            $wallet->balance = $request->balance;
+        }
+        $wallet->user_id = $user->is_admin ? $request->input('user_id', $user->id) : $user->id;
+        $wallet->save();
+        
 
-        return new WalletResource($resource);
+        return new WalletResource($wallet);
     }
 
     /**
@@ -83,9 +97,12 @@ class WalletController extends Controller
     {
         $user = $request->user();
 
-        $data = $user->is_admin ? $request->only('name', 'balance', 'is_active') : $request->only('name', 'is_active');
-
-        $wallet->update($data);
+        $wallet->name = $request->name;
+        $wallet->is_active = $request->is_active;
+        if ($user->is_admin and $request->has('balance')) {
+            $wallet->balance = $request->balance;
+        }
+        $wallet->save();
 
         return new WalletResource($wallet);
     }

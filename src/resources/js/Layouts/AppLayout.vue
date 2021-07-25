@@ -20,10 +20,10 @@
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('users')" :active="route().current('users')" v-if="$page.props.user.is_admin">
+                                <jet-nav-link :href="route('users.index')" :active="route().current('users.index')" v-if="$page.props.user.is_admin">
                                     Users
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('wallet')" :active="route().current('wallet')">
+                                <jet-nav-link :href="route('wallets.index')" :active="route().current('wallets.index')">
                                     Wallets
                                 </jet-nav-link>
                             </div>
@@ -150,11 +150,11 @@
                             Dashboard
                         </jet-responsive-nav-link>
 
-                        <jet-responsive-nav-link :href="route('users')" :active="route().current('users')" v-if="$page.props.user.is_admin">
+                        <jet-responsive-nav-link :href="route('users.index')" :active="route().current('users.index')" v-if="$page.props.user.is_admin">
                             Users
                         </jet-responsive-nav-link>
 
-                        <jet-responsive-nav-link :href="route('wallet')" :active="route().current('wallet')">
+                        <jet-responsive-nav-link :href="route('wallets.index')" :active="route().current('wallets.index')">
                             Wallet
                         </jet-responsive-nav-link>
                     </div>

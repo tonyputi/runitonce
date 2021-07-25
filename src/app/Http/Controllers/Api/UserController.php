@@ -30,7 +30,13 @@ class UserController extends Controller
         
         $query = User::withCount('wallets');
         $query->when(!$user->is_admin, fn ($query) => $query->where('id', $request->user()->id));
-        $collection = $query->get();
+        $query->when($request->filled('search'), function ($query) use($request) {
+            $query->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->search}%");
+                $query->orWhere('email', 'like', "%{$request->search}%");
+            });
+        });
+        $collection = $request->has('page') ? $query->paginate() : $query->get();
 
         return UserResource::collection($collection);
     }

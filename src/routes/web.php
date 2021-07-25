@@ -26,7 +26,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
-    Route::get('/users', fn () => Inertia::render('User/Index'))->name('users');
-    Route::get('/users/{user}/wallets', fn () => Inertia::render('Wallet/Index'))->name('users.wallets');
-    Route::get('/wallet', fn () => Inertia::render('Wallet/Index'))->name('wallet');
+    Route::get('/users', fn () => Inertia::render('User/Index'))->name('users.index');
+    Route::get('/users/{user}', fn () => Inertia::render('User/Show'))->name('users.show');
+    Route::get('/users/{user}/wallets', fn () => Inertia::render('Wallet/Index'))->name('users.wallets.index');
+    Route::get('/wallets', fn () => Inertia::render('Wallet/Index'))->name('wallets.index');
+    Route::get('/wallets/{wallet}', fn () => Inertia::render('Wallet/Show'))->name('wallets.show');
+    Route::get('/wallets/create', fn () => Inertia::render('Wallet/Create'))->name('wallets.create');
 });
