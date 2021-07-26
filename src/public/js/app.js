@@ -29283,6 +29283,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      isLoading: true,
       resource: {
         name: '',
         user_id: null,
@@ -29307,6 +29308,8 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     if (!this.isCreating) {
       this.fetch();
+    } else {
+      this.isLoading = false;
     }
   }
 });
@@ -29333,6 +29336,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_ActionMessage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Jetstream/ActionMessage */ "./resources/js/Jetstream/ActionMessage.vue");
 /* harmony import */ var _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Jetstream/SecondaryButton */ "./resources/js/Jetstream/SecondaryButton.vue");
 /* harmony import */ var _Jetstream_Select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/Jetstream/Select */ "./resources/js/Jetstream/Select.vue");
+/* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/esm/index.js");
+
 
 
 
@@ -29356,26 +29361,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     resource: {
-      type: Object // default: {
-      //     name: '',
-      //     user_id: null,
-      //     balance: 0,
-      //     is_active: 0
-      // }
-
+      type: Object,
+      "default": {
+        name: '',
+        user_id: null,
+        balance: 0,
+        is_active: 0
+      }
     }
   },
   data: function data() {
     return {
       recentlySuccessful: false,
       errors: {},
-      users: [] // wallet: {
-      //     name: this.resource.name,
-      //     user_id: this.resource.user_id,
-      //     balance: this.resource.balance,
-      //     is_active: this.resource.is_active
-      // }
-
+      users: [],
+      toast: (0,vue_toastification__WEBPACK_IMPORTED_MODULE_9__.useToast)()
     };
   },
   mounted: function mounted() {
@@ -29385,7 +29385,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     canUpdateOrCreate: function canUpdateOrCreate() {
-      return true; // return this.permissions.canUpdate || !this.attributes.id
+      return true;
     }
   },
   methods: {
@@ -29395,6 +29395,16 @@ __webpack_require__.r(__webpack_exports__);
       if (this.resource.id) {
         axios.put(route('api.wallets.update', [this.resource.id]), this.resource).then(function (response) {
           _this.recentlySuccessful = true;
+
+          _this.toast.success('Operation success');
+        })["catch"](function (error) {
+          if (error.response.status == 422) {
+            _this.toast.error('something went wrong');
+
+            _this.errors = _.mapValues(error.response.data.errors, function (error) {
+              return _.first(error);
+            });
+          }
         });
       } else {
         axios.post(route('api.wallets.store'), this.resource).then(function (response) {
@@ -29403,6 +29413,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.$inertia.visit(route('wallets.index'));
         })["catch"](function (error) {
           if (error.response.status == 422) {
+            _this.toast.error('something went wrong');
+
             _this.errors = _.mapValues(error.response.data.errors, function (error) {
               return _.first(error);
             });
@@ -29487,7 +29499,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     updateWallet: function updateWallet(wallet) {
-      axios.put(route('api.wallets.update', [wallet.id]), wallet).then(function (response) {// show banner
+      var _this = this;
+
+      axios.put(route('api.wallets.update', [wallet.id]), wallet).then(function (response) {
+        _this.toast.success('Operation success');
       });
     }
   }
@@ -35013,7 +35028,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_app_layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("app-layout");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_app_layout, null, {
+  return !$data.isLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_app_layout, {
+    key: 0
+  }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h2", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.title), 1
       /* TEXT */
@@ -35034,7 +35051,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  });
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -35774,7 +35791,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _inertiajs_progress__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/progress */ "./node_modules/@inertiajs/progress/dist/index.js");
+/* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/esm/index.js");
+/* harmony import */ var vue_toastification_dist_index_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-toastification/dist/index.css */ "./node_modules/vue-toastification/dist/index.css");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // Import modules...
+
+
 
 
 
@@ -35794,7 +35815,7 @@ var el = document.getElementById('app');
   methods: {
     route: route
   }
-}).use(_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.plugin).mount(el);
+}).use(_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.plugin).use(vue_toastification__WEBPACK_IMPORTED_MODULE_3__.default).mount(el);
 _inertiajs_progress__WEBPACK_IMPORTED_MODULE_2__.InertiaProgress.init({
   color: '#4B5563'
 });
@@ -35843,6 +35864,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/esm/index.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -35853,7 +35876,9 @@ __webpack_require__.r(__webpack_exports__);
       search: null,
       isLoading: true,
       resourceBeingDeleted: null,
-      collectionSelected: []
+      collectionSelected: [],
+      recentlySuccessful: false,
+      toast: (0,vue_toastification__WEBPACK_IMPORTED_MODULE_0__.useToast)()
     };
   },
   created: function created() {
@@ -35915,8 +35940,10 @@ __webpack_require__.r(__webpack_exports__);
     fetch: function fetch() {
       var _this = this;
 
+      this.isLoading = true;
       axios.get(this.endpoint).then(function (response) {
         _this.resource = response.data.data;
+        _this.isLoading = false;
       })["catch"](function (error) {
         _this.$inertia.visit(route('error', [error.response.status]));
       });
@@ -36006,6 +36033,30 @@ if ($defineProperty) {
 } else {
 	module.exports.apply = applyBind;
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-toastification/dist/index.css":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-toastification/dist/index.css ***!
+  \****************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".Vue-Toastification__container {\n  z-index: 9999;\n  position: fixed;\n  padding: 4px;\n  width: 600px;\n  box-sizing: border-box;\n  display: flex;\n  min-height: 100%;\n  color: #fff;\n  flex-direction: column;\n  pointer-events: none;\n}\n@media only screen and (min-width : 600px) {\n  .Vue-Toastification__container.top-left, .Vue-Toastification__container.top-right, .Vue-Toastification__container.top-center {\n    top: 1em;\n  }\n  .Vue-Toastification__container.bottom-left, .Vue-Toastification__container.bottom-right, .Vue-Toastification__container.bottom-center {\n    bottom: 1em;\n    flex-direction: column-reverse;\n  }\n  .Vue-Toastification__container.top-left, .Vue-Toastification__container.bottom-left {\n    left: 1em;\n  }\n  .Vue-Toastification__container.top-left .Vue-Toastification__toast, .Vue-Toastification__container.bottom-left .Vue-Toastification__toast {\n    margin-right: auto;\n  }\n  .Vue-Toastification__container.top-left .Vue-Toastification__toast--rtl, .Vue-Toastification__container.bottom-left .Vue-Toastification__toast--rtl {\n    margin-right: unset;\n    margin-left: auto;\n  }\n  .Vue-Toastification__container.top-right, .Vue-Toastification__container.bottom-right {\n    right: 1em;\n  }\n  .Vue-Toastification__container.top-right .Vue-Toastification__toast, .Vue-Toastification__container.bottom-right .Vue-Toastification__toast {\n    margin-left: auto;\n  }\n  .Vue-Toastification__container.top-right .Vue-Toastification__toast--rtl, .Vue-Toastification__container.bottom-right .Vue-Toastification__toast--rtl {\n    margin-left: unset;\n    margin-right: auto;\n  }\n  .Vue-Toastification__container.top-center, .Vue-Toastification__container.bottom-center {\n    left: 50%;\n    margin-left: -300px;\n  }\n  .Vue-Toastification__container.top-center .Vue-Toastification__toast, .Vue-Toastification__container.bottom-center .Vue-Toastification__toast {\n    margin-left: auto;\n    margin-right: auto;\n  }\n}\n@media only screen and (max-width : 600px) {\n  .Vue-Toastification__container {\n    width: 100vw;\n    padding: 0;\n    left: 0;\n    margin: 0;\n  }\n  .Vue-Toastification__container .Vue-Toastification__toast {\n    width: 100%;\n  }\n  .Vue-Toastification__container.top-left, .Vue-Toastification__container.top-right, .Vue-Toastification__container.top-center {\n    top: 0;\n  }\n  .Vue-Toastification__container.bottom-left, .Vue-Toastification__container.bottom-right, .Vue-Toastification__container.bottom-center {\n    bottom: 0;\n    flex-direction: column-reverse;\n  }\n}\n\n.Vue-Toastification__toast {\n  display: inline-flex;\n  position: relative;\n  max-height: 800px;\n  min-height: 64px;\n  box-sizing: border-box;\n  margin-bottom: 1rem;\n  padding: 22px 24px;\n  border-radius: 8px;\n  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);\n  justify-content: space-between;\n  font-family: \"Lato\", Helvetica, \"Roboto\", Arial, sans-serif;\n  max-width: 600px;\n  min-width: 326px;\n  pointer-events: auto;\n  overflow: hidden;\n  transform: translateZ(0);\n  direction: ltr;\n}\n.Vue-Toastification__toast--rtl {\n  direction: rtl;\n}\n.Vue-Toastification__toast--default {\n  background-color: #1976d2;\n  color: #fff;\n}\n.Vue-Toastification__toast--info {\n  background-color: #2196f3;\n  color: #fff;\n}\n.Vue-Toastification__toast--success {\n  background-color: #4caf50;\n  color: #fff;\n}\n.Vue-Toastification__toast--error {\n  background-color: #ff5252;\n  color: #fff;\n}\n.Vue-Toastification__toast--warning {\n  background-color: #ffc107;\n  color: #fff;\n}\n@media only screen and (max-width : 600px) {\n  .Vue-Toastification__toast {\n    border-radius: 0px;\n    margin-bottom: 0.5rem;\n  }\n}\n.Vue-Toastification__toast-body {\n  flex: 1;\n  line-height: 24px;\n  font-size: 16px;\n  word-break: break-word;\n  white-space: pre-wrap;\n}\n.Vue-Toastification__toast-component-body {\n  flex: 1;\n}\n.Vue-Toastification__toast.disable-transition {\n  -webkit-animation: none !important;\n          animation: none !important;\n}\n\n.Vue-Toastification__close-button {\n  font-weight: bold;\n  font-size: 24px;\n  line-height: 24px;\n  background: transparent;\n  outline: none;\n  border: none;\n  padding: 0;\n  padding-left: 10px;\n  cursor: pointer;\n  transition: 0.3s ease;\n  align-items: center;\n  color: #fff;\n  opacity: 0.3;\n  transition: visibility 0s, opacity 0.2s linear;\n}\n.Vue-Toastification__close-button:hover, .Vue-Toastification__close-button:focus {\n  opacity: 1;\n}\n.Vue-Toastification__toast:not(:hover) .Vue-Toastification__close-button.show-on-hover {\n  opacity: 0;\n}\n.Vue-Toastification__toast--rtl .Vue-Toastification__close-button {\n  padding-left: unset;\n  padding-right: 10px;\n}\n\n@-webkit-keyframes scale-x-frames {\n  0% {\n    transform: scaleX(1);\n  }\n  100% {\n    transform: scaleX(0);\n  }\n}\n\n@keyframes scale-x-frames {\n  0% {\n    transform: scaleX(1);\n  }\n  100% {\n    transform: scaleX(0);\n  }\n}\n.Vue-Toastification__progress-bar {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  height: 5px;\n  z-index: 10000;\n  background-color: rgba(255, 255, 255, 0.7);\n  transform-origin: left;\n  -webkit-animation: scale-x-frames linear 1 forwards;\n          animation: scale-x-frames linear 1 forwards;\n}\n.Vue-Toastification__toast--rtl .Vue-Toastification__progress-bar {\n  right: 0;\n  left: unset;\n  transform-origin: right;\n}\n\n.Vue-Toastification__icon {\n  margin: auto 18px auto 0px;\n  background: transparent;\n  outline: none;\n  border: none;\n  padding: 0;\n  transition: 0.3s ease;\n  align-items: center;\n  width: 20px;\n  height: 100%;\n}\n.Vue-Toastification__toast--rtl .Vue-Toastification__icon {\n  margin: auto 0px auto 18px;\n}\n\n@-webkit-keyframes bounceInRight {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  from {\n    opacity: 0;\n    transform: translate3d(3000px, 0, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(-25px, 0, 0);\n  }\n  75% {\n    transform: translate3d(10px, 0, 0);\n  }\n  90% {\n    transform: translate3d(-5px, 0, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n\n@keyframes bounceInRight {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  from {\n    opacity: 0;\n    transform: translate3d(3000px, 0, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(-25px, 0, 0);\n  }\n  75% {\n    transform: translate3d(10px, 0, 0);\n  }\n  90% {\n    transform: translate3d(-5px, 0, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n@-webkit-keyframes bounceOutRight {\n  40% {\n    opacity: 1;\n    transform: translate3d(-20px, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(1000px, 0, 0);\n  }\n}\n@keyframes bounceOutRight {\n  40% {\n    opacity: 1;\n    transform: translate3d(-20px, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(1000px, 0, 0);\n  }\n}\n@-webkit-keyframes bounceInLeft {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  0% {\n    opacity: 0;\n    transform: translate3d(-3000px, 0, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(25px, 0, 0);\n  }\n  75% {\n    transform: translate3d(-10px, 0, 0);\n  }\n  90% {\n    transform: translate3d(5px, 0, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n@keyframes bounceInLeft {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  0% {\n    opacity: 0;\n    transform: translate3d(-3000px, 0, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(25px, 0, 0);\n  }\n  75% {\n    transform: translate3d(-10px, 0, 0);\n  }\n  90% {\n    transform: translate3d(5px, 0, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n@-webkit-keyframes bounceOutLeft {\n  20% {\n    opacity: 1;\n    transform: translate3d(20px, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(-2000px, 0, 0);\n  }\n}\n@keyframes bounceOutLeft {\n  20% {\n    opacity: 1;\n    transform: translate3d(20px, 0, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(-2000px, 0, 0);\n  }\n}\n@-webkit-keyframes bounceInUp {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  from {\n    opacity: 0;\n    transform: translate3d(0, 3000px, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(0, -20px, 0);\n  }\n  75% {\n    transform: translate3d(0, 10px, 0);\n  }\n  90% {\n    transform: translate3d(0, -5px, 0);\n  }\n  to {\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes bounceInUp {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  from {\n    opacity: 0;\n    transform: translate3d(0, 3000px, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(0, -20px, 0);\n  }\n  75% {\n    transform: translate3d(0, 10px, 0);\n  }\n  90% {\n    transform: translate3d(0, -5px, 0);\n  }\n  to {\n    transform: translate3d(0, 0, 0);\n  }\n}\n@-webkit-keyframes bounceOutUp {\n  20% {\n    transform: translate3d(0, -10px, 0);\n  }\n  40%, 45% {\n    opacity: 1;\n    transform: translate3d(0, 20px, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(0, -2000px, 0);\n  }\n}\n@keyframes bounceOutUp {\n  20% {\n    transform: translate3d(0, -10px, 0);\n  }\n  40%, 45% {\n    opacity: 1;\n    transform: translate3d(0, 20px, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(0, -2000px, 0);\n  }\n}\n@-webkit-keyframes bounceInDown {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  0% {\n    opacity: 0;\n    transform: translate3d(0, -3000px, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(0, 25px, 0);\n  }\n  75% {\n    transform: translate3d(0, -10px, 0);\n  }\n  90% {\n    transform: translate3d(0, 5px, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n@keyframes bounceInDown {\n  from, 60%, 75%, 90%, to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n            animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n  0% {\n    opacity: 0;\n    transform: translate3d(0, -3000px, 0);\n  }\n  60% {\n    opacity: 1;\n    transform: translate3d(0, 25px, 0);\n  }\n  75% {\n    transform: translate3d(0, -10px, 0);\n  }\n  90% {\n    transform: translate3d(0, 5px, 0);\n  }\n  to {\n    transform: none;\n  }\n}\n@-webkit-keyframes bounceOutDown {\n  20% {\n    transform: translate3d(0, 10px, 0);\n  }\n  40%, 45% {\n    opacity: 1;\n    transform: translate3d(0, -20px, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(0, 2000px, 0);\n  }\n}\n@keyframes bounceOutDown {\n  20% {\n    transform: translate3d(0, 10px, 0);\n  }\n  40%, 45% {\n    opacity: 1;\n    transform: translate3d(0, -20px, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(0, 2000px, 0);\n  }\n}\n@keyframes bounceOutDown {\n  20% {\n    transform: translate3d(0, 10px, 0);\n  }\n  40%, 45% {\n    opacity: 1;\n    transform: translate3d(0, -20px, 0);\n  }\n  to {\n    opacity: 0;\n    transform: translate3d(0, 2000px, 0);\n  }\n}\n.Vue-Toastification__bounce-enter-active.top-left, .Vue-Toastification__bounce-enter-active.bottom-left {\n  -webkit-animation-name: bounceInLeft;\n          animation-name: bounceInLeft;\n}\n.Vue-Toastification__bounce-enter-active.top-right, .Vue-Toastification__bounce-enter-active.bottom-right {\n  -webkit-animation-name: bounceInRight;\n          animation-name: bounceInRight;\n}\n.Vue-Toastification__bounce-enter-active.top-center {\n  -webkit-animation-name: bounceInDown;\n          animation-name: bounceInDown;\n}\n.Vue-Toastification__bounce-enter-active.bottom-center {\n  -webkit-animation-name: bounceInUp;\n          animation-name: bounceInUp;\n}\n\n.Vue-Toastification__bounce-leave-active:not(.disable-transition).top-left, .Vue-Toastification__bounce-leave-active:not(.disable-transition).bottom-left {\n  -webkit-animation-name: bounceOutLeft;\n          animation-name: bounceOutLeft;\n}\n.Vue-Toastification__bounce-leave-active:not(.disable-transition).top-right, .Vue-Toastification__bounce-leave-active:not(.disable-transition).bottom-right {\n  -webkit-animation-name: bounceOutRight;\n          animation-name: bounceOutRight;\n}\n.Vue-Toastification__bounce-leave-active:not(.disable-transition).top-center {\n  -webkit-animation-name: bounceOutUp;\n          animation-name: bounceOutUp;\n}\n.Vue-Toastification__bounce-leave-active:not(.disable-transition).bottom-center {\n  -webkit-animation-name: bounceOutDown;\n          animation-name: bounceOutDown;\n}\n\n.Vue-Toastification__bounce-leave-active,\n.Vue-Toastification__bounce-enter-active {\n  -webkit-animation-duration: 750ms;\n          animation-duration: 750ms;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n}\n\n.Vue-Toastification__bounce-move {\n  transition-timing-function: ease-in-out;\n  transition-property: all;\n  transition-duration: 400ms;\n}\n\n/* ----------------------------------------------\n * Modified version from Animista\n * Animista is Licensed under FreeBSD License.\n * See http://animista.net/license for more info. \n * w: http://animista.net, t: @cssanimista\n * ---------------------------------------------- */\n@-webkit-keyframes fadeOutTop {\n  0% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(-50px);\n    opacity: 0;\n  }\n}\n@keyframes fadeOutTop {\n  0% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(-50px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes fadeOutLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-50px);\n    opacity: 0;\n  }\n}\n@keyframes fadeOutLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-50px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes fadeOutBottom {\n  0% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(50px);\n    opacity: 0;\n  }\n}\n@keyframes fadeOutBottom {\n  0% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(50px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes fadeOutRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(50px);\n    opacity: 0;\n  }\n}\n@keyframes fadeOutRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(50px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes fadeInLeft {\n  0% {\n    transform: translateX(-50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n@keyframes fadeInLeft {\n  0% {\n    transform: translateX(-50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes fadeInRight {\n  0% {\n    transform: translateX(50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n@keyframes fadeInRight {\n  0% {\n    transform: translateX(50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes fadeInTop {\n  0% {\n    transform: translateY(-50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n}\n@keyframes fadeInTop {\n  0% {\n    transform: translateY(-50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes fadeInBottom {\n  0% {\n    transform: translateY(50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n}\n@keyframes fadeInBottom {\n  0% {\n    transform: translateY(50px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0);\n    opacity: 1;\n  }\n}\n.Vue-Toastification__fade-enter-active.top-left, .Vue-Toastification__fade-enter-active.bottom-left {\n  -webkit-animation-name: fadeInLeft;\n          animation-name: fadeInLeft;\n}\n.Vue-Toastification__fade-enter-active.top-right, .Vue-Toastification__fade-enter-active.bottom-right {\n  -webkit-animation-name: fadeInRight;\n          animation-name: fadeInRight;\n}\n.Vue-Toastification__fade-enter-active.top-center {\n  -webkit-animation-name: fadeInTop;\n          animation-name: fadeInTop;\n}\n.Vue-Toastification__fade-enter-active.bottom-center {\n  -webkit-animation-name: fadeInBottom;\n          animation-name: fadeInBottom;\n}\n\n.Vue-Toastification__fade-leave-active:not(.disable-transition).top-left, .Vue-Toastification__fade-leave-active:not(.disable-transition).bottom-left {\n  -webkit-animation-name: fadeOutLeft;\n          animation-name: fadeOutLeft;\n}\n.Vue-Toastification__fade-leave-active:not(.disable-transition).top-right, .Vue-Toastification__fade-leave-active:not(.disable-transition).bottom-right {\n  -webkit-animation-name: fadeOutRight;\n          animation-name: fadeOutRight;\n}\n.Vue-Toastification__fade-leave-active:not(.disable-transition).top-center {\n  -webkit-animation-name: fadeOutTop;\n          animation-name: fadeOutTop;\n}\n.Vue-Toastification__fade-leave-active:not(.disable-transition).bottom-center {\n  -webkit-animation-name: fadeOutBottom;\n          animation-name: fadeOutBottom;\n}\n\n.Vue-Toastification__fade-leave-active,\n.Vue-Toastification__fade-enter-active {\n  -webkit-animation-duration: 750ms;\n          animation-duration: 750ms;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n}\n\n.Vue-Toastification__fade-move {\n  transition-timing-function: ease-in-out;\n  transition-property: all;\n  transition-duration: 400ms;\n}\n\n/* ----------------------------------------------\n * Modified version from Animista\n * Animista is Licensed under FreeBSD License.\n * See http://animista.net/license for more info. \n * w: http://animista.net, t: @cssanimista\n * ---------------------------------------------- */\n@-webkit-keyframes slideInBlurredLeft {\n  0% {\n    transform: translateX(-1000px) scaleX(2.5) scaleY(0.2);\n    transform-origin: 100% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@keyframes slideInBlurredLeft {\n  0% {\n    transform: translateX(-1000px) scaleX(2.5) scaleY(0.2);\n    transform-origin: 100% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes slideInBlurredTop {\n  0% {\n    transform: translateY(-1000px) scaleY(2.5) scaleX(0.2);\n    transform-origin: 50% 0%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@keyframes slideInBlurredTop {\n  0% {\n    transform: translateY(-1000px) scaleY(2.5) scaleX(0.2);\n    transform-origin: 50% 0%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes slideInBlurredRight {\n  0% {\n    transform: translateX(1000px) scaleX(2.5) scaleY(0.2);\n    transform-origin: 0% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@keyframes slideInBlurredRight {\n  0% {\n    transform: translateX(1000px) scaleX(2.5) scaleY(0.2);\n    transform-origin: 0% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes slideInBlurredBottom {\n  0% {\n    transform: translateY(1000px) scaleY(2.5) scaleX(0.2);\n    transform-origin: 50% 100%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@keyframes slideInBlurredBottom {\n  0% {\n    transform: translateY(1000px) scaleY(2.5) scaleX(0.2);\n    transform-origin: 50% 100%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n  100% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n}\n@-webkit-keyframes slideOutBlurredTop {\n  0% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 0%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(-1000px) scaleY(2) scaleX(0.2);\n    transform-origin: 50% 0%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n}\n@keyframes slideOutBlurredTop {\n  0% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 0%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(-1000px) scaleY(2) scaleX(0.2);\n    transform-origin: 50% 0%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes slideOutBlurredBottom {\n  0% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(1000px) scaleY(2) scaleX(0.2);\n    transform-origin: 50% 100%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n}\n@keyframes slideOutBlurredBottom {\n  0% {\n    transform: translateY(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateY(1000px) scaleY(2) scaleX(0.2);\n    transform-origin: 50% 100%;\n    filter: blur(240px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes slideOutBlurredLeft {\n  0% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-1000px) scaleX(2) scaleY(0.2);\n    transform-origin: 100% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n}\n@keyframes slideOutBlurredLeft {\n  0% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-1000px) scaleX(2) scaleY(0.2);\n    transform-origin: 100% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n}\n@-webkit-keyframes slideOutBlurredRight {\n  0% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(1000px) scaleX(2) scaleY(0.2);\n    transform-origin: 0% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n}\n@keyframes slideOutBlurredRight {\n  0% {\n    transform: translateX(0) scaleY(1) scaleX(1);\n    transform-origin: 50% 50%;\n    filter: blur(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(1000px) scaleX(2) scaleY(0.2);\n    transform-origin: 0% 50%;\n    filter: blur(40px);\n    opacity: 0;\n  }\n}\n.Vue-Toastification__slideBlurred-enter-active.top-left, .Vue-Toastification__slideBlurred-enter-active.bottom-left {\n  -webkit-animation-name: slideInBlurredLeft;\n          animation-name: slideInBlurredLeft;\n}\n.Vue-Toastification__slideBlurred-enter-active.top-right, .Vue-Toastification__slideBlurred-enter-active.bottom-right {\n  -webkit-animation-name: slideInBlurredRight;\n          animation-name: slideInBlurredRight;\n}\n.Vue-Toastification__slideBlurred-enter-active.top-center {\n  -webkit-animation-name: slideInBlurredTop;\n          animation-name: slideInBlurredTop;\n}\n.Vue-Toastification__slideBlurred-enter-active.bottom-center {\n  -webkit-animation-name: slideInBlurredBottom;\n          animation-name: slideInBlurredBottom;\n}\n\n.Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).top-left, .Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).bottom-left {\n  -webkit-animation-name: slideOutBlurredLeft;\n          animation-name: slideOutBlurredLeft;\n}\n.Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).top-right, .Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).bottom-right {\n  -webkit-animation-name: slideOutBlurredRight;\n          animation-name: slideOutBlurredRight;\n}\n.Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).top-center {\n  -webkit-animation-name: slideOutBlurredTop;\n          animation-name: slideOutBlurredTop;\n}\n.Vue-Toastification__slideBlurred-leave-active:not(.disable-transition).bottom-center {\n  -webkit-animation-name: slideOutBlurredBottom;\n          animation-name: slideOutBlurredBottom;\n}\n\n.Vue-Toastification__slideBlurred-leave-active,\n.Vue-Toastification__slideBlurred-enter-active {\n  -webkit-animation-duration: 750ms;\n          animation-duration: 750ms;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n}\n\n.Vue-Toastification__slideBlurred-move {\n  transition-timing-function: ease-in-out;\n  transition-property: all;\n  transition-duration: 400ms;\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
@@ -58903,6 +58954,36 @@ module.exports = function getSideChannel() {
 
 /***/ }),
 
+/***/ "./node_modules/vue-toastification/dist/index.css":
+/*!********************************************************!*\
+  !*** ./node_modules/vue-toastification/dist/index.css ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_index_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./index.css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-toastification/dist/index.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_index_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_index_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Welcome.vue?vue&type=style&index=0&id=317d1a6e&scoped=true&lang=css":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Welcome.vue?vue&type=style&index=0&id=317d1a6e&scoped=true&lang=css ***!
@@ -62775,6 +62856,1246 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Welcome_vue_vue_type_style_index_0_id_317d1a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Welcome.vue?vue&type=style&index=0&id=317d1a6e&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Welcome.vue?vue&type=style&index=0&id=317d1a6e&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-toastification/dist/esm/index.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/vue-toastification/dist/esm/index.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "EventBus": () => (/* binding */ EventBus),
+/* harmony export */   "POSITION": () => (/* binding */ POSITION),
+/* harmony export */   "TYPE": () => (/* binding */ TYPE),
+/* harmony export */   "createToastInterface": () => (/* binding */ createToastInterface),
+/* harmony export */   "globalEventBus": () => (/* binding */ globalEventBus),
+/* harmony export */   "provideToast": () => (/* binding */ provideToast),
+/* harmony export */   "toastInjectionKey": () => (/* binding */ toastInjectionKey),
+/* harmony export */   "useToast": () => (/* binding */ useToast)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+const isFunction = value => typeof value === "function";
+
+const isString = value => typeof value === "string";
+
+const isNonEmptyString = value => isString(value) && value.trim().length > 0;
+
+const isNumber = value => typeof value === "number";
+
+const isUndefined = value => typeof value === "undefined";
+
+const isObject = value => typeof value === "object" && value !== null;
+
+const isJSX = obj => hasProp(obj, "tag") && isNonEmptyString(obj.tag);
+
+const isTouchEvent = event => window.TouchEvent && event instanceof TouchEvent;
+
+const isToastComponent = obj => hasProp(obj, "component") && isToastContent(obj.component);
+
+const isVueComponent = c => isFunction(c) || isObject(c);
+
+const isToastContent = obj => // Ignore undefined
+!isUndefined(obj) && ( // Is a string
+isString(obj) || // Regular Vue component
+isVueComponent(obj) || // Nested object
+isToastComponent(obj));
+
+const isDOMRect = obj => isObject(obj) && ["height", "width", "right", "left", "top", "bottom"].every(p => isNumber(obj[p]));
+
+const hasProp = (obj, propKey) => (isObject(obj) || isFunction(obj)) && propKey in obj;
+/**
+ * ID generator
+ */
+
+
+const getId = (i => () => i++)(0);
+
+function getX(event) {
+  return isTouchEvent(event) ? event.targetTouches[0].clientX : event.clientX;
+}
+
+function getY(event) {
+  return isTouchEvent(event) ? event.targetTouches[0].clientY : event.clientY;
+}
+
+const removeElement = el => {
+  if (!isUndefined(el.remove)) {
+    el.remove();
+  } else if (el.parentNode) {
+    el.parentNode.removeChild(el);
+  }
+};
+
+const getVueComponentFromObj = obj => {
+  if (isToastComponent(obj)) {
+    // Recurse if component prop
+    return getVueComponentFromObj(obj.component);
+  }
+
+  if (isJSX(obj)) {
+    // Create render function for JSX
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+      render() {
+        return obj;
+      }
+
+    });
+  } // Return regular string or raw object
+
+
+  return typeof obj === "string" ? obj : (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRaw)((0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(obj));
+};
+
+const normalizeToastComponent = obj => {
+  if (typeof obj === "string") {
+    return obj;
+  }
+
+  const props = hasProp(obj, "props") && isObject(obj.props) ? obj.props : {};
+  const listeners = hasProp(obj, "listeners") && isObject(obj.listeners) ? obj.listeners : {};
+  return {
+    component: getVueComponentFromObj(obj),
+    props,
+    listeners
+  };
+};
+
+const isBrowser = () => typeof window !== "undefined";
+
+class EventBus {
+  constructor() {
+    this.allHandlers = {};
+  }
+
+  getHandlers(eventType) {
+    return this.allHandlers[eventType] || [];
+  }
+
+  on(eventType, handler) {
+    const handlers = this.getHandlers(eventType);
+    handlers.push(handler);
+    this.allHandlers[eventType] = handlers;
+  }
+
+  off(eventType, handler) {
+    const handlers = this.getHandlers(eventType);
+    handlers.splice(handlers.indexOf(handler) >>> 0, 1);
+  }
+
+  emit(eventType, event) {
+    const handlers = this.getHandlers(eventType);
+    handlers.forEach(handler => handler(event));
+  }
+
+}
+const isEventBusInterface = e => ["on", "off", "emit"].every(f => hasProp(e, f) && isFunction(e[f]));
+
+var TYPE;
+
+(function (TYPE) {
+  TYPE["SUCCESS"] = "success";
+  TYPE["ERROR"] = "error";
+  TYPE["WARNING"] = "warning";
+  TYPE["INFO"] = "info";
+  TYPE["DEFAULT"] = "default";
+})(TYPE || (TYPE = {}));
+
+var POSITION;
+
+(function (POSITION) {
+  POSITION["TOP_LEFT"] = "top-left";
+  POSITION["TOP_CENTER"] = "top-center";
+  POSITION["TOP_RIGHT"] = "top-right";
+  POSITION["BOTTOM_LEFT"] = "bottom-left";
+  POSITION["BOTTOM_CENTER"] = "bottom-center";
+  POSITION["BOTTOM_RIGHT"] = "bottom-right";
+})(POSITION || (POSITION = {}));
+
+var EVENTS;
+
+(function (EVENTS) {
+  EVENTS["ADD"] = "add";
+  EVENTS["DISMISS"] = "dismiss";
+  EVENTS["UPDATE"] = "update";
+  EVENTS["CLEAR"] = "clear";
+  EVENTS["UPDATE_DEFAULTS"] = "update_defaults";
+})(EVENTS || (EVENTS = {}));
+
+const VT_NAMESPACE = "Vue-Toastification";
+
+const COMMON = {
+  type: {
+    type: String,
+    default: TYPE.DEFAULT
+  },
+  classNames: {
+    type: [String, Array],
+    default: () => []
+  },
+  trueBoolean: {
+    type: Boolean,
+    default: true
+  }
+};
+const ICON = {
+  type: COMMON.type,
+  customIcon: {
+    type: [String, Boolean, Object, Function],
+    default: true
+  }
+};
+const CLOSE_BUTTON = {
+  component: {
+    type: [String, Object, Function, Boolean],
+    default: "button"
+  },
+  classNames: COMMON.classNames,
+  showOnHover: {
+    type: Boolean,
+    default: false
+  },
+  ariaLabel: {
+    type: String,
+    default: "close"
+  }
+};
+const PROGRESS_BAR = {
+  timeout: {
+    type: [Number, Boolean],
+    default: 5000
+  },
+  hideProgressBar: {
+    type: Boolean,
+    default: false
+  },
+  isRunning: {
+    type: Boolean,
+    default: false
+  }
+};
+const TRANSITION = {
+  transition: {
+    type: [Object, String],
+    default: `${VT_NAMESPACE}__bounce`
+  }
+};
+const CORE_TOAST = {
+  position: {
+    type: String,
+    default: POSITION.TOP_RIGHT
+  },
+  draggable: COMMON.trueBoolean,
+  draggablePercent: {
+    type: Number,
+    default: 0.6
+  },
+  pauseOnFocusLoss: COMMON.trueBoolean,
+  pauseOnHover: COMMON.trueBoolean,
+  closeOnClick: COMMON.trueBoolean,
+  timeout: PROGRESS_BAR.timeout,
+  hideProgressBar: PROGRESS_BAR.hideProgressBar,
+  toastClassName: COMMON.classNames,
+  bodyClassName: COMMON.classNames,
+  icon: ICON.customIcon,
+  closeButton: CLOSE_BUTTON.component,
+  closeButtonClassName: CLOSE_BUTTON.classNames,
+  showCloseButtonOnHover: CLOSE_BUTTON.showOnHover,
+  accessibility: {
+    type: Object,
+    default: () => ({
+      toastRole: "alert",
+      closeButtonLabel: "close"
+    })
+  },
+  rtl: {
+    type: Boolean,
+    default: false
+  },
+  eventBus: {
+    type: Object,
+    required: true,
+    default: new EventBus()
+  }
+};
+const TOAST = {
+  id: {
+    type: [String, Number],
+    required: true,
+    default: 0
+  },
+  type: COMMON.type,
+  content: {
+    type: [String, Object, Function],
+    required: true,
+    default: ""
+  },
+  onClick: {
+    type: Function,
+    default: () => {}
+  },
+  onClose: {
+    type: Function,
+    default:
+    /* istanbul ignore next */
+    () => {}
+  }
+};
+const CONTAINER = {
+  container: {
+    type: [Object, Function],
+    default: () => document.body
+  },
+  newestOnTop: COMMON.trueBoolean,
+  maxToasts: {
+    type: Number,
+    default: 20
+  },
+  transition: TRANSITION.transition,
+  toastDefaults: Object,
+  filterBeforeCreate: {
+    type: Function,
+    default: toast => toast
+  },
+  filterToasts: {
+    type: Function,
+    default: toasts => toasts
+  },
+  containerClassName: COMMON.classNames,
+  onMounted: Function
+};
+var PROPS = {
+  CORE_TOAST,
+  TOAST,
+  CONTAINER,
+  PROGRESS_BAR,
+  ICON,
+  TRANSITION,
+  CLOSE_BUTTON
+};
+
+var script = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VtProgressBar",
+  props: PROPS.PROGRESS_BAR,
+
+  // TODO: The typescript compiler is not playing nice with emit types
+  // Rollback this change once ts is able to infer emit types
+  // emits: ["close-toast"],
+  data() {
+    return {
+      hasClass: true
+    };
+  },
+
+  computed: {
+    style() {
+      return {
+        animationDuration: `${this.timeout}ms`,
+        animationPlayState: this.isRunning ? "running" : "paused",
+        opacity: this.hideProgressBar ? 0 : 1
+      };
+    },
+
+    cpClass() {
+      return this.hasClass ? `${VT_NAMESPACE}__progress-bar` : "";
+    }
+
+  },
+  watch: {
+    timeout() {
+      this.hasClass = false;
+      this.$nextTick(() => this.hasClass = true);
+    }
+
+  },
+
+  mounted() {
+    this.$el.addEventListener("animationend", this.animationEnded);
+  },
+
+  beforeUnmount() {
+    this.$el.removeEventListener("animationend", this.animationEnded);
+  },
+
+  methods: {
+    animationEnded() {
+      // See TODO on line 16
+      // eslint-disable-next-line vue/require-explicit-emits
+      this.$emit("close-toast");
+    }
+
+  }
+});
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
+    style: _ctx.style,
+    class: _ctx.cpClass
+  }, null, 6 /* CLASS, STYLE */))
+}
+
+script.render = render;
+script.__file = "src/components/VtProgressBar.vue";
+
+var script$1 = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VtCloseButton",
+  props: PROPS.CLOSE_BUTTON,
+  computed: {
+    buttonComponent() {
+      if (this.component !== false) {
+        return getVueComponentFromObj(this.component);
+      }
+
+      return "button";
+    },
+
+    classes() {
+      const classes = [`${VT_NAMESPACE}__close-button`];
+
+      if (this.showOnHover) {
+        classes.push("show-on-hover");
+      }
+
+      return classes.concat(this.classNames);
+    }
+
+  }
+});
+
+const _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" × ");
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)(_ctx.buttonComponent), (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
+    "aria-label": _ctx.ariaLabel,
+    class: _ctx.classes
+  }, _ctx.$attrs), {
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+      _hoisted_1
+    ]),
+    _: 1
+  }, 16 /* FULL_PROPS */, ["aria-label", "class"]))
+}
+
+script$1.render = render$1;
+script$1.__file = "src/components/VtCloseButton.vue";
+
+var script$2 = {};
+
+const _hoisted_1$1 = {
+  "aria-hidden": "true",
+  focusable: "false",
+  "data-prefix": "fas",
+  "data-icon": "check-circle",
+  class: "svg-inline--fa fa-check-circle fa-w-16",
+  role: "img",
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 512 512"
+};
+const _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  fill: "currentColor",
+  d: "M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+}, null, -1 /* HOISTED */);
+
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("svg", _hoisted_1$1, [
+    _hoisted_2
+  ]))
+}
+
+script$2.render = render$2;
+script$2.__file = "src/components/icons/VtSuccessIcon.vue";
+
+var script$3 = {};
+
+const _hoisted_1$2 = {
+  "aria-hidden": "true",
+  focusable: "false",
+  "data-prefix": "fas",
+  "data-icon": "info-circle",
+  class: "svg-inline--fa fa-info-circle fa-w-16",
+  role: "img",
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 512 512"
+};
+const _hoisted_2$1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  fill: "currentColor",
+  d: "M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+}, null, -1 /* HOISTED */);
+
+function render$3(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("svg", _hoisted_1$2, [
+    _hoisted_2$1
+  ]))
+}
+
+script$3.render = render$3;
+script$3.__file = "src/components/icons/VtInfoIcon.vue";
+
+var script$4 = {};
+
+const _hoisted_1$3 = {
+  "aria-hidden": "true",
+  focusable: "false",
+  "data-prefix": "fas",
+  "data-icon": "exclamation-circle",
+  class: "svg-inline--fa fa-exclamation-circle fa-w-16",
+  role: "img",
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 512 512"
+};
+const _hoisted_2$2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  fill: "currentColor",
+  d: "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+}, null, -1 /* HOISTED */);
+
+function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("svg", _hoisted_1$3, [
+    _hoisted_2$2
+  ]))
+}
+
+script$4.render = render$4;
+script$4.__file = "src/components/icons/VtWarningIcon.vue";
+
+var script$5 = {};
+
+const _hoisted_1$4 = {
+  "aria-hidden": "true",
+  focusable: "false",
+  "data-prefix": "fas",
+  "data-icon": "exclamation-triangle",
+  class: "svg-inline--fa fa-exclamation-triangle fa-w-18",
+  role: "img",
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 576 512"
+};
+const _hoisted_2$3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  fill: "currentColor",
+  d: "M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+}, null, -1 /* HOISTED */);
+
+function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("svg", _hoisted_1$4, [
+    _hoisted_2$3
+  ]))
+}
+
+script$5.render = render$5;
+script$5.__file = "src/components/icons/VtErrorIcon.vue";
+
+var script$6 = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VtIcon",
+  props: PROPS.ICON,
+  computed: {
+    customIconChildren() {
+      return hasProp(this.customIcon, "iconChildren") ? this.trimValue(this.customIcon.iconChildren) : "";
+    },
+
+    customIconClass() {
+      if (isString(this.customIcon)) {
+        return this.trimValue(this.customIcon);
+      } else if (hasProp(this.customIcon, "iconClass")) {
+        return this.trimValue(this.customIcon.iconClass);
+      }
+
+      return "";
+    },
+
+    customIconTag() {
+      if (hasProp(this.customIcon, "iconTag")) {
+        return this.trimValue(this.customIcon.iconTag, "i");
+      }
+
+      return "i";
+    },
+
+    hasCustomIcon() {
+      return this.customIconClass.length > 0;
+    },
+
+    component() {
+      if (this.hasCustomIcon) {
+        return this.customIconTag;
+      }
+
+      if (isToastContent(this.customIcon)) {
+        return getVueComponentFromObj(this.customIcon);
+      }
+
+      return this.iconTypeComponent;
+    },
+
+    iconTypeComponent() {
+      const types = {
+        [TYPE.DEFAULT]: script$3,
+        [TYPE.INFO]: script$3,
+        [TYPE.SUCCESS]: script$2,
+        [TYPE.ERROR]: script$5,
+        [TYPE.WARNING]: script$4
+      };
+      return types[this.type];
+    },
+
+    iconClasses() {
+      const classes = [`${VT_NAMESPACE}__icon`];
+
+      if (this.hasCustomIcon) {
+        return classes.concat(this.customIconClass);
+      }
+
+      return classes;
+    }
+
+  },
+  methods: {
+    trimValue(value, empty = "") {
+      return isNonEmptyString(value) ? value.trim() : empty;
+    }
+
+  }
+});
+
+function render$6(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)(_ctx.component), { class: _ctx.iconClasses }, {
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.customIconChildren), 1 /* TEXT */)
+    ]),
+    _: 1
+  }, 8 /* PROPS */, ["class"]))
+}
+
+script$6.render = render$6;
+script$6.__file = "src/components/VtIcon.vue";
+
+var script$7 = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VtToast",
+  components: {
+    ProgressBar: script,
+    CloseButton: script$1,
+    Icon: script$6
+  },
+  inheritAttrs: false,
+  props: Object.assign({}, PROPS.CORE_TOAST, PROPS.TOAST),
+
+  data() {
+    const data = {
+      isRunning: true,
+      disableTransitions: false,
+      beingDragged: false,
+      dragStart: 0,
+      dragPos: {
+        x: 0,
+        y: 0
+      },
+      dragRect: {}
+    };
+    return data;
+  },
+
+  computed: {
+    classes() {
+      const classes = [`${VT_NAMESPACE}__toast`, `${VT_NAMESPACE}__toast--${this.type}`, `${this.position}`].concat(this.toastClassName);
+
+      if (this.disableTransitions) {
+        classes.push("disable-transition");
+      }
+
+      if (this.rtl) {
+        classes.push(`${VT_NAMESPACE}__toast--rtl`);
+      }
+
+      return classes;
+    },
+
+    bodyClasses() {
+      const classes = [`${VT_NAMESPACE}__toast-${isString(this.content) ? "body" : "component-body"}`].concat(this.bodyClassName);
+      return classes;
+    },
+
+    /* istanbul ignore next */
+    draggableStyle() {
+      if (this.dragStart === this.dragPos.x) {
+        return {};
+      } else if (this.beingDragged) {
+        return {
+          transform: `translateX(${this.dragDelta}px)`,
+          opacity: 1 - Math.abs(this.dragDelta / this.removalDistance)
+        };
+      } else {
+        return {
+          transition: "transform 0.2s, opacity 0.2s",
+          transform: "translateX(0)",
+          opacity: 1
+        };
+      }
+    },
+
+    dragDelta() {
+      return this.beingDragged ? this.dragPos.x - this.dragStart : 0;
+    },
+
+    removalDistance() {
+      if (isDOMRect(this.dragRect)) {
+        return (this.dragRect.right - this.dragRect.left) * this.draggablePercent;
+      }
+
+      return 0;
+    }
+
+  },
+
+  mounted() {
+    if (this.draggable) {
+      this.draggableSetup();
+    }
+
+    if (this.pauseOnFocusLoss) {
+      this.focusSetup();
+    }
+  },
+
+  beforeUnmount() {
+    if (this.draggable) {
+      this.draggableCleanup();
+    }
+
+    if (this.pauseOnFocusLoss) {
+      this.focusCleanup();
+    }
+  },
+
+  methods: {
+    getVueComponentFromObj,
+
+    closeToast() {
+      this.eventBus.emit(EVENTS.DISMISS, this.id);
+    },
+
+    clickHandler() {
+      if (this.onClick) {
+        this.onClick(this.closeToast);
+      }
+
+      if (this.closeOnClick) {
+        if (!this.beingDragged || this.dragStart === this.dragPos.x) {
+          this.closeToast();
+        }
+      }
+    },
+
+    timeoutHandler() {
+      this.closeToast();
+    },
+
+    hoverPause() {
+      if (this.pauseOnHover) {
+        this.isRunning = false;
+      }
+    },
+
+    hoverPlay() {
+      if (this.pauseOnHover) {
+        this.isRunning = true;
+      }
+    },
+
+    focusPause() {
+      this.isRunning = false;
+    },
+
+    focusPlay() {
+      this.isRunning = true;
+    },
+
+    focusSetup() {
+      addEventListener("blur", this.focusPause);
+      addEventListener("focus", this.focusPlay);
+    },
+
+    focusCleanup() {
+      removeEventListener("blur", this.focusPause);
+      removeEventListener("focus", this.focusPlay);
+    },
+
+    draggableSetup() {
+      const element = this.$el;
+      element.addEventListener("touchstart", this.onDragStart, {
+        passive: true
+      });
+      element.addEventListener("mousedown", this.onDragStart);
+      addEventListener("touchmove", this.onDragMove, {
+        passive: false
+      });
+      addEventListener("mousemove", this.onDragMove);
+      addEventListener("touchend", this.onDragEnd);
+      addEventListener("mouseup", this.onDragEnd);
+    },
+
+    draggableCleanup() {
+      const element = this.$el;
+      element.removeEventListener("touchstart", this.onDragStart);
+      element.removeEventListener("mousedown", this.onDragStart);
+      removeEventListener("touchmove", this.onDragMove);
+      removeEventListener("mousemove", this.onDragMove);
+      removeEventListener("touchend", this.onDragEnd);
+      removeEventListener("mouseup", this.onDragEnd);
+    },
+
+    onDragStart(event) {
+      this.beingDragged = true;
+      this.dragPos = {
+        x: getX(event),
+        y: getY(event)
+      };
+      this.dragStart = getX(event);
+      this.dragRect = this.$el.getBoundingClientRect();
+    },
+
+    onDragMove(event) {
+      if (this.beingDragged) {
+        event.preventDefault();
+
+        if (this.isRunning) {
+          this.isRunning = false;
+        }
+
+        this.dragPos = {
+          x: getX(event),
+          y: getY(event)
+        };
+      }
+    },
+
+    onDragEnd() {
+      if (this.beingDragged) {
+        if (Math.abs(this.dragDelta) >= this.removalDistance) {
+          this.disableTransitions = true;
+          this.$nextTick(() => this.closeToast());
+        } else {
+          setTimeout(() => {
+            this.beingDragged = false;
+
+            if (isDOMRect(this.dragRect) && this.pauseOnHover && this.dragRect.bottom >= this.dragPos.y && this.dragPos.y >= this.dragRect.top && this.dragRect.left <= this.dragPos.x && this.dragPos.x <= this.dragRect.right) {
+              this.isRunning = false;
+            } else {
+              this.isRunning = true;
+            }
+          });
+        }
+      }
+    }
+
+  }
+});
+
+function render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Icon");
+  const _component_CloseButton = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CloseButton");
+  const _component_ProgressBar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("ProgressBar");
+
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
+    class: _ctx.classes,
+    style: _ctx.draggableStyle,
+    onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.clickHandler(...args))),
+    onMouseenter: _cache[2] || (_cache[2] = (...args) => (_ctx.hoverPause(...args))),
+    onMouseleave: _cache[3] || (_cache[3] = (...args) => (_ctx.hoverPlay(...args)))
+  }, [
+    (_ctx.icon)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Icon, {
+          key: 0,
+          "custom-icon": _ctx.icon,
+          type: _ctx.type
+        }, null, 8 /* PROPS */, ["custom-icon", "type"]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      role: _ctx.accessibility.toastRole || 'alert',
+      class: _ctx.bodyClasses
+    }, [
+      (typeof _ctx.content === 'string')
+        ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, { key: 0 }, [
+            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.content), 1 /* TEXT */)
+          ], 64 /* STABLE_FRAGMENT */))
+        : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent)(_ctx.getVueComponentFromObj(_ctx.content)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
+            key: 1,
+            "toast-id": _ctx.id
+          }, _ctx.content.props, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toHandlers)(_ctx.content.listeners), { onCloseToast: _ctx.closeToast }), null, 16 /* FULL_PROPS */, ["toast-id", "onCloseToast"]))
+    ], 10 /* CLASS, PROPS */, ["role"]),
+    (!!_ctx.closeButton)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CloseButton, {
+          key: 1,
+          component: _ctx.closeButton,
+          "class-names": _ctx.closeButtonClassName,
+          "show-on-hover": _ctx.showCloseButtonOnHover,
+          "aria-label": _ctx.accessibility.closeButtonLabel,
+          onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(_ctx.closeToast, ["stop"])
+        }, null, 8 /* PROPS */, ["component", "class-names", "show-on-hover", "aria-label", "onClick"]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true),
+    (_ctx.timeout)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_ProgressBar, {
+          key: 2,
+          "is-running": _ctx.isRunning,
+          "hide-progress-bar": _ctx.hideProgressBar,
+          timeout: _ctx.timeout,
+          onCloseToast: _ctx.timeoutHandler
+        }, null, 8 /* PROPS */, ["is-running", "hide-progress-bar", "timeout", "onCloseToast"]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)
+  ], 38 /* CLASS, STYLE, HYDRATE_EVENTS */))
+}
+
+script$7.render = render$7;
+script$7.__file = "src/components/VtToast.vue";
+
+// Transition methods taken from https://github.com/BinarCode/vue2-transitions
+var script$8 = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VtTransition",
+  props: PROPS.TRANSITION,
+  emits: ["leave"],
+  methods: {
+    leave(el) {
+      el.style.left = el.offsetLeft + "px";
+      el.style.top = el.offsetTop + "px";
+      el.style.width = getComputedStyle(el).width;
+      el.style.position = "absolute";
+    }
+
+  }
+});
+
+function render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.TransitionGroup, {
+    tag: "div",
+    "enter-active-class": 
+      _ctx.transition.enter ? _ctx.transition.enter : `${_ctx.transition}-enter-active`
+    ,
+    "move-class": _ctx.transition.move ? _ctx.transition.move : `${_ctx.transition}-move`,
+    "leave-active-class": 
+      _ctx.transition.leave ? _ctx.transition.leave : `${_ctx.transition}-leave-active`
+    ,
+    onLeave: _ctx.leave
+  }, {
+    default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")
+    ]),
+    _: 3
+  }, 8 /* PROPS */, ["enter-active-class", "move-class", "leave-active-class", "onLeave"]))
+}
+
+script$8.render = render$8;
+script$8.__file = "src/components/VtTransition.vue";
+
+var script$9 = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  name: "VueToastification",
+  components: {
+    Toast: script$7,
+    VtTransition: script$8
+  },
+  props: Object.assign({}, PROPS.CORE_TOAST, PROPS.CONTAINER, PROPS.TRANSITION),
+
+  data() {
+    const data = {
+      count: 0,
+      positions: Object.values(POSITION),
+      toasts: {},
+      defaults: {}
+    };
+    return data;
+  },
+
+  computed: {
+    toastArray() {
+      return Object.values(this.toasts);
+    },
+
+    filteredToasts() {
+      return this.defaults.filterToasts(this.toastArray);
+    }
+
+  },
+
+  beforeMount() {
+    const events = this.eventBus;
+    events.on(EVENTS.ADD, this.addToast);
+    events.on(EVENTS.CLEAR, this.clearToasts);
+    events.on(EVENTS.DISMISS, this.dismissToast);
+    events.on(EVENTS.UPDATE, this.updateToast);
+    events.on(EVENTS.UPDATE_DEFAULTS, this.updateDefaults);
+    this.defaults = this.$props;
+  },
+
+  mounted() {
+    this.setup(this.container);
+  },
+
+  methods: {
+    async setup(container) {
+      if (isFunction(container)) {
+        container = await container();
+      }
+
+      removeElement(this.$el);
+      container.appendChild(this.$el);
+    },
+
+    setToast(props) {
+      if (!isUndefined(props.id)) {
+        this.toasts[props.id] = props;
+      }
+    },
+
+    addToast(params) {
+      params.content = normalizeToastComponent(params.content);
+      const props = Object.assign({}, this.defaults, params.type && this.defaults.toastDefaults && this.defaults.toastDefaults[params.type], params);
+      const toast = this.defaults.filterBeforeCreate(props, this.toastArray);
+      toast && this.setToast(toast);
+    },
+
+    dismissToast(id) {
+      const toast = this.toasts[id];
+
+      if (!isUndefined(toast) && !isUndefined(toast.onClose)) {
+        toast.onClose();
+      }
+
+      delete this.toasts[id];
+    },
+
+    clearToasts() {
+      Object.keys(this.toasts).forEach(id => {
+        this.dismissToast(id);
+      });
+    },
+
+    getPositionToasts(position) {
+      const toasts = this.filteredToasts.filter(toast => toast.position === position).slice(0, this.defaults.maxToasts);
+      return this.defaults.newestOnTop ? toasts.reverse() : toasts;
+    },
+
+    updateDefaults(update) {
+      // Update container if changed
+      if (!isUndefined(update.container)) {
+        this.setup(update.container);
+      }
+
+      this.defaults = Object.assign({}, this.defaults, update);
+    },
+
+    updateToast({
+      id,
+      options,
+      create
+    }) {
+      if (this.toasts[id]) {
+        // If a timeout is defined, and is equal to the one before, change it
+        // a little so the progressBar is reset
+        if (options.timeout && options.timeout === this.toasts[id].timeout) {
+          options.timeout++;
+        }
+
+        this.setToast(Object.assign({}, this.toasts[id], options));
+      } else if (create) {
+        this.addToast(Object.assign({}, {
+          id
+        }, options));
+      }
+    },
+
+    getClasses(position) {
+      const classes = [`${VT_NAMESPACE}__container`, position];
+      return classes.concat(this.defaults.containerClassName);
+    }
+
+  }
+});
+
+function render$9(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Toast = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Toast");
+  const _component_VtTransition = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("VtTransition");
+
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [
+    ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.positions, (pos) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", { key: pos }, [
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VtTransition, {
+          transition: _ctx.defaults.transition,
+          class: _ctx.getClasses(pos)
+        }, {
+          default: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(() => [
+            ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.getPositionToasts(pos), (toast) => {
+              return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Toast, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
+                key: toast.id
+              }, toast), null, 16 /* FULL_PROPS */))
+            }), 128 /* KEYED_FRAGMENT */))
+          ]),
+          _: 2
+        }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["transition", "class"])
+      ]))
+    }), 128 /* KEYED_FRAGMENT */))
+  ]))
+}
+
+script$9.render = render$9;
+script$9.__file = "src/components/VtToastContainer.vue";
+
+const buildInterface = (globalOptions = {}, mountContainer = true) => {
+  const events = globalOptions.eventBus = globalOptions.eventBus || new EventBus();
+
+  if (mountContainer) {
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)(() => {
+      const app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(script$9, Object.assign({}, globalOptions));
+      const component = app.mount(document.createElement("div"));
+      const onMounted = globalOptions.onMounted;
+
+      if (!isUndefined(onMounted)) {
+        onMounted(component, app);
+      }
+    });
+  }
+  /**
+   * Display a toast
+   */
+
+
+  const toast = (content, options) => {
+    const props = Object.assign({}, {
+      id: getId(),
+      type: TYPE.DEFAULT
+    }, options, {
+      content
+    });
+    events.emit(EVENTS.ADD, props);
+    return props.id;
+  };
+  /**
+   * Clear all toasts
+   */
+
+
+  toast.clear = () => events.emit(EVENTS.CLEAR, undefined);
+  /**
+   * Update Plugin Defaults
+   */
+
+
+  toast.updateDefaults = update => {
+    events.emit(EVENTS.UPDATE_DEFAULTS, update);
+  };
+  /**
+   * Dismiss toast specified by an id
+   */
+
+
+  toast.dismiss = id => {
+    events.emit(EVENTS.DISMISS, id);
+  };
+
+  function updateToast(id, {
+    content,
+    options
+  }, create = false) {
+    const opt = Object.assign({}, options, {
+      content
+    });
+    events.emit(EVENTS.UPDATE, {
+      id,
+      options: opt,
+      create
+    });
+  }
+
+  toast.update = updateToast;
+  /**
+   * Display a success toast
+   */
+
+  toast.success = (content, options) => toast(content, Object.assign({}, options, {
+    type: TYPE.SUCCESS
+  }));
+  /**
+   * Display an info toast
+   */
+
+
+  toast.info = (content, options) => toast(content, Object.assign({}, options, {
+    type: TYPE.INFO
+  }));
+  /**
+   * Display an error toast
+   */
+
+
+  toast.error = (content, options) => toast(content, Object.assign({}, options, {
+    type: TYPE.ERROR
+  }));
+  /**
+   * Display a warning toast
+   */
+
+
+  toast.warning = (content, options) => toast(content, Object.assign({}, options, {
+    type: TYPE.WARNING
+  }));
+
+  return toast;
+};
+
+const createMockToastInterface = () => {
+  const toast = () => console.warn("[Vue Toastification] This plugin does not support SSR!");
+
+  return new Proxy(toast, {
+    get() {
+      return toast;
+    }
+
+  });
+};
+
+function createToastInterface(optionsOrEventBus) {
+  if (!isBrowser()) {
+    return createMockToastInterface();
+  }
+
+  if (isEventBusInterface(optionsOrEventBus)) {
+    return buildInterface({
+      eventBus: optionsOrEventBus
+    }, false);
+  }
+
+  return buildInterface(optionsOrEventBus, true);
+}
+
+const toastInjectionKey = Symbol("VueToastification");
+const globalEventBus = new EventBus();
+
+const VueToastificationPlugin = (App, options) => {
+  const inter = createToastInterface(Object.assign({
+    eventBus: globalEventBus
+  }, options));
+  App.provide(toastInjectionKey, inter);
+};
+
+const provideToast = options => {
+  const toast = createToastInterface(options);
+  (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(toastInjectionKey, toast);
+};
+
+const useToast = eventBus => {
+  if (eventBus) {
+    return createToastInterface(eventBus);
+  }
+
+  const toast = (0,vue__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance)() ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(toastInjectionKey) : undefined;
+  return toast ? toast : createToastInterface(globalEventBus);
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VueToastificationPlugin);
+
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),

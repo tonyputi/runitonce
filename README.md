@@ -44,10 +44,7 @@ Type `make test` to run the unit test already present to the project
 ## Known issue
 
 - landing page improve
-- add is_loading on show when ajax call must be finish
-- notification system for some operations
 - profile page should work also for other users
-- user show is missed for user admin
 
 - remove npm from docker file
 - export postman collection

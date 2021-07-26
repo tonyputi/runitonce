@@ -1,3 +1,5 @@
+import { useToast } from "vue-toastification";
+
 export default {
     data() {
         return {
@@ -8,7 +10,9 @@ export default {
             search: null,
             isLoading: true,
             resourceBeingDeleted: null,
-            collectionSelected: []
+            collectionSelected: [],
+            recentlySuccessful: false,
+            toast: useToast()
         }
     },
     created() {
@@ -30,6 +34,7 @@ export default {
     methods: {
         fetch(page = null) {
             this.isLoading = true;
+
             let config = {
                 params: {
                     page: page ? page : this.meta.current_page,

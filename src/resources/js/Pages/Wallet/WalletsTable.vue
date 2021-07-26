@@ -3,7 +3,7 @@
         <div class="flex my-4">
             <jet-search-input v-model="search" @input="fetch()" placeholder="Search wallet" />
 
-            <jet-link-button class="ml-4" :href="route('wallets.create')">
+            <jet-link-button class="ml-4" :href="route('wallets.create')" >
                 Create
             </jet-link-button>
         </div>
@@ -114,7 +114,7 @@
         methods: {
             updateWallet(wallet) {
                 axios.put(route('api.wallets.update', [wallet.id]), wallet).then(response => {
-                    // show banner
+                    this.toast.success('Operation success');
                 }); 
             }
         }

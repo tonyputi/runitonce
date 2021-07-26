@@ -66,6 +66,7 @@
     import JetActionMessage from '@/Jetstream/ActionMessage'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
     import JetSelect from '@/Jetstream/Select'
+    import { useToast } from "vue-toastification";
 
     export default {
         components: {
@@ -83,12 +84,12 @@
         props: {
             resource: {
                 type: Object,
-                // default: {
-                //     name: '',
-                //     user_id: null,
-                //     balance: 0,
-                //     is_active: 0
-                // }
+                default: {
+                    name: '',
+                    user_id: null,
+                    balance: 0,
+                    is_active: 0
+                }
             }
         },
 
@@ -97,12 +98,7 @@
                 recentlySuccessful: false,
                 errors: {},
                 users: [],
-                // wallet: {
-                //     name: this.resource.name,
-                //     user_id: this.resource.user_id,
-                //     balance: this.resource.balance,
-                //     is_active: this.resource.is_active
-                // }
+                toast: useToast()
             }
         },
 
@@ -115,7 +111,6 @@
         computed: {
             canUpdateOrCreate() {
                 return true
-                // return this.permissions.canUpdate || !this.attributes.id
             },
         },
 
@@ -125,6 +120,12 @@
                     axios.put(route('api.wallets.update', [this.resource.id]), this.resource)
                         .then((response) => {
                             this.recentlySuccessful = true
+                            this.toast.success('Operation success');
+                        }).catch(error => {
+                            if (error.response.status == 422) {
+                                this.toast.error('something went wrong');
+                                this.errors = _.mapValues(error.response.data.errors, error => _.first(error))
+                            }
                         });
 
                 } else {
@@ -134,6 +135,7 @@
                             this.$inertia.visit(route('wallets.index'))
                         }).catch(error => {
                             if (error.response.status == 422) {
+                                this.toast.error('something went wrong');
                                 this.errors = _.mapValues(error.response.data.errors, error => _.first(error))
                             }
                         });

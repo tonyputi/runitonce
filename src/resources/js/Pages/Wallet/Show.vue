@@ -1,5 +1,5 @@
 <template>
-    <app-layout>
+    <app-layout v-if="!isLoading">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ title }}
@@ -40,6 +40,7 @@ export default {
 
     data() {
         return {
+            isLoading: true,
             resource: {
                 name: '',
                 user_id: null,
@@ -64,6 +65,8 @@ export default {
     created() {
         if(!this.isCreating) {
             this.fetch()
+        } else {
+            this.isLoading = false
         }
     }
 }
