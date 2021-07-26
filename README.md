@@ -1,9 +1,39 @@
-# Run it once assestement test
+# Run it once assignment test
 
 ## Preface
 
-I know I can use `Laravel Sancutm` or `Laravel Passport` to authenticate the user and I can use `Laravel Sail`
-to manage the docker environment but due to the test I did everything from scratch.
+The purpose of the assignement is to create a bunch of api to manage the player wallets and a frontend
+application that will consume that apis. More info at `assignment-202107.docx`
+
+We know that it is possilble to use custom authentication solution but why we have to reinvent the wheel
+when `Laravel` is already providing many ways to authenticate a user via SPA and consume api? So I decided
+to use `Laravel Sancutm` rather than `Laravel Passport` and make use of `axios` library to consume the apis
+from the frontend application.
+
+The application is making use the following `Laravel` features
+    - Sanctum to authenticate api calls
+    - Policies to authorize user abilities
+    - Form Requests
+    - Model observer to handle soft delete relations between user and wallets
+    - Model resources to standardize the json response for better handling
+    - Model factories to seed database during unit tests
+    - Unit test to test api via http request
+    - Custom casts to convert euro-cents to euro
+    - Jetstream a starter kit for SPA
+
+### Postman
+
+Also a `postman_collection.json` file is provided in order to test the api by postman
+You can also add the following test script to your `login` api request in order to save 
+the `token` as variable inside your postman collection and use it for all subsequents
+calls:
+
+```javascript
+if (responseCode.code === 200) {
+    var response = pm.response.text();
+    pm.collectionVariables.set('token', response);
+}
+```
 
 ## Requirements
 
@@ -16,6 +46,8 @@ to manage the docker environment but due to the test I did everything from scrat
 1. Type `make build` to build the docker image
 2. Type `make start` to start the docker containers
 3. Type `make init` to initialize the application container (only the first time is requried)
+
+The `make init` command will lunch `composer install` and `php artisan migrate refresh --seed`
 
 ## Testing the application
 
@@ -43,9 +75,8 @@ Type `make test` to run the unit test already present to the project
 
 ## Known issue
 
-- landing page improve
 - profile page should work also for other users
+- laravel dusk test are missed
 - review the code
 
 - remove npm from docker file
-- laravel dusk test are missed

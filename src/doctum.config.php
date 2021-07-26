@@ -9,11 +9,11 @@ $iterator = Finder::create()
     ->exclude('public')
     ->exclude('vendor')
     ->exclude('storage')
-    ->in('src');
+    ->in('.');
 
 return new Doctum($iterator, [
     'language'  => 'en',
-    'title'     => 'Hub',
-    'build_dir' => __DIR__ . '/doc',
-    'cache_dir' => __DIR__ . '/.cache',
+    'title'     => 'Wallet Manger',
+    'build_dir' => __DIR__ . '/public/docs',
+    'cache_dir' => __DIR__ . '/public/.cache',
 ]);

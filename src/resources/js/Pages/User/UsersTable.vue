@@ -38,11 +38,6 @@
                         <td class="p-3 text-center">{{ user.updated_at }}</td>
                         <td class="p-3">
                             <div class="inline-flex items-center">
-                                <inertia-link  v-if="canView(user)"
-                                    :href="route('users.show', user.id)"
-                                    class="inline-flex cursor-pointer text-70 hover:text-primary mr-3">
-                                    <EyeIcon class="h-6 w-6" />
-                                </inertia-link >
                                 <button v-if="canDelete(user)"
                                     @click="resourceBeingDeleted=user"
                                     class="inline-flex appearance-none cursor-pointer hover:text-primary mr-3">
