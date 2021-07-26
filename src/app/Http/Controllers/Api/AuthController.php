@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -16,7 +16,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function register(RegisterUserRequest $request)
+    public function register(UserStoreRequest $request)
     {
         return User::create([
             'name' => $request->name,

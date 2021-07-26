@@ -45,7 +45,7 @@ Type `make test` to run the unit test already present to the project
 
 - landing page improve
 - profile page should work also for other users
+- review the code
 
 - remove npm from docker file
-- export postman collection
 - laravel dusk test are missed

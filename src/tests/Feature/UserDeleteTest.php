@@ -4,11 +4,10 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Wallet;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class WalletDeleteTest extends TestCase
+class UserDeleteTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
@@ -25,58 +24,56 @@ class WalletDeleteTest extends TestCase
     }
     
     /**
-     * A basic wallet show test as user
+     * A basic user show test as user
      *
      * @group runitonce
-     * @group wallet
-     * @group wallet-delete
+     * @group user
+     * @group user-delete
      * @return void
      */
-    public function test_delete_wallet_as_user()
+    public function test_delete_user_as_user()
     {
         $user = User::factory()->create();
-        $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->delete(route('api.wallets.destroy', [$wallet->id]));
+            ->delete(route('api.users.destroy', [$user->id]));
 
         $response->assertStatus(204);
     }
 
     /**
-     * A basic wallet show test as admin
+     * A basic user show test as admin
      *
      * @group runitonce
-     * @group wallet
-     * @group wallet-delete
+     * @group user
+     * @group user-delete
      * @return void
      */
-    public function test_delete_wallet_as_admin()
+    public function test_delete_user_as_admin()
     {
         $user = User::factory()->create();
-        $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($this->admin)
-            ->delete(route('api.wallets.destroy', [$wallet->id]));
+            ->delete(route('api.users.destroy', [$user->id]));
 
         $response->assertStatus(204);
     }
 
     /**
-     * A basic wallet show test as unauthorized user
+     * A basic user show test as unauthorized user
      *
      * @group runitonce
-     * @group wallet
-     * @group wallet-delete
+     * @group user
+     * @group user-delete
      * @return void
      */
-    public function test_delete_wallet_as_unauthorized_user()
+    public function test_delete_user_as_unauthorized_user()
     {
         $user = User::factory()->create();
-        $wallet = Wallet::factory()->create();
+        $user2 = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->delete(route('api.wallets.destroy', [$wallet->id]));
+            ->delete(route('api.users.destroy', [$user2->id]));
 
         $response->assertStatus(403);
     }
