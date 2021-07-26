@@ -22,7 +22,8 @@
             <!-- Delete resource confirmation modal -->
             <delete-resource-modal
                 :resource="resourceBeingDeleted"
-                @close="resourceBeingDeleted = null" />
+                @close="resourceBeingDeleted = null"
+                @change="$inertia.visit(route('wallets.index'))" />
         </template>
     </jet-action-section>
 </template>

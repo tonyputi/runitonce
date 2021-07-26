@@ -1098,6 +1098,9 @@ select {
 .top-0 {
 	top: 0px;
 }
+.top-1\/2 {
+	top: 50%;
+}
 .z-0 {
 	z-index: 0;
 }
@@ -1117,6 +1120,10 @@ select {
 .my-4 {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
+}
+.my-0 {
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 .ml-3 {
 	margin-left: 0.75rem;
@@ -1241,6 +1248,12 @@ select {
 .h-3 {
 	height: 0.75rem;
 }
+.h-full {
+	height: 100%;
+}
+.h-0 {
+	height: 0px;
+}
 .min-h-screen {
 	min-height: 100vh;
 }
@@ -1342,6 +1355,24 @@ select {
 }
 .transform {
 	transform: var(--tw-transform);
+}
+@-webkit-keyframes ping {
+
+	75%, 100% {
+		transform: scale(2);
+		opacity: 0;
+	}
+}
+@keyframes ping {
+
+	75%, 100% {
+		transform: scale(2);
+		opacity: 0;
+	}
+}
+.animate-ping {
+	-webkit-animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+	        animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 .cursor-default {
 	cursor: default;
@@ -1569,6 +1600,14 @@ select {
 .bg-red-500 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
+.bg-purple-400 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(167, 139, 250, var(--tw-bg-opacity));
+}
+.bg-purple-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(139, 92, 246, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;

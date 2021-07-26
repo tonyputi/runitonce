@@ -34537,6 +34537,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
+  key: 0,
   "class": "max-w-7xl mx-auto sm:px-6 lg:px-8"
 };
 var _hoisted_2 = {
@@ -34648,7 +34649,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_delete_resource_modal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("delete-resource-modal");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_search_input, {
+  return !_ctx.isLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_search_input, {
     modelValue: _ctx.search,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return _ctx.search = $event;
@@ -34779,7 +34780,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 8
   /* PROPS */
-  , ["resource"])]);
+  , ["resource"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -34844,6 +34845,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         resource: $data.resourceBeingDeleted,
         onClose: _cache[2] || (_cache[2] = function ($event) {
           return $data.resourceBeingDeleted = null;
+        }),
+        onChange: _cache[3] || (_cache[3] = function ($event) {
+          return _ctx.$inertia.visit(_ctx.route('wallets.index'));
         })
       }, null, 8
       /* PROPS */
@@ -35221,6 +35225,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
+  key: 0,
   "class": "max-w-7xl mx-auto sm:px-6 lg:px-8"
 };
 var _hoisted_2 = {
@@ -35337,7 +35342,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_delete_resource_modal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("delete-resource-modal");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_search_input, {
+  return !_ctx.isLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_search_input, {
     modelValue: _ctx.search,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return _ctx.search = $event;
@@ -35478,7 +35483,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 8
   /* PROPS */
-  , ["resource"])]);
+  , ["resource"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -35846,6 +35851,7 @@ __webpack_require__.r(__webpack_exports__);
         current_page: 1
       },
       search: null,
+      isLoading: true,
       resourceBeingDeleted: null,
       collectionSelected: []
     };
@@ -35873,6 +35879,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      this.isLoading = true;
       var config = {
         params: {
           page: page ? page : this.meta.current_page,
@@ -35882,6 +35889,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.endpoint, config).then(function (response) {
         _this.collection = response.data.data;
         _this.meta = response.data.meta;
+        _this.isLoading = false;
+      })["catch"](function (error) {
+        _this.$inertia.visit(route('error', [error.response.status]));
       });
     }
   }
@@ -35908,9 +35918,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(this.endpoint).then(function (response) {
         _this.resource = response.data.data;
       })["catch"](function (error) {
-        if (error.response.status === 404) {
-          _this.$inertia.visit(route('error', [404]));
-        }
+        _this.$inertia.visit(route('error', [error.response.status]));
       });
     }
   }

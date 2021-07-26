@@ -43,11 +43,12 @@ Type `make test` to run the unit test already present to the project
 
 ## Known issue
 
-- add is_loading when ajax call must be finish
-- delete inside detail page is not redirect back to index
+- landing page improve
+- add is_loading on show when ajax call must be finish
 - notification system for some operations
 - profile page should work also for other users
 - user show is missed for user admin
+
 - remove npm from docker file
 - export postman collection
 - laravel dusk test are missed

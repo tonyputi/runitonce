@@ -6,6 +6,7 @@ export default {
                 current_page: 1
             },
             search: null,
+            isLoading: true,
             resourceBeingDeleted: null,
             collectionSelected: []
         }
@@ -28,6 +29,7 @@ export default {
     },
     methods: {
         fetch(page = null) {
+            this.isLoading = true;
             let config = {
                 params: {
                     page: page ? page : this.meta.current_page,
@@ -38,6 +40,9 @@ export default {
             axios.get(this.endpoint, config).then((response) => {
                 this.collection = response.data.data
                 this.meta = response.data.meta
+                this.isLoading = false;
+            }).catch(error => {
+                this.$inertia.visit(route('error', [error.response.status]))
             })
         },
     }

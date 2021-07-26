@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" v-if="!isLoading">
         <div class="flex my-4">
             <jet-search-input v-model="search" @input="fetch()" placeholder="Search wallet" />
 
