@@ -27,6 +27,9 @@ class WalletShowTest extends TestCase
     /**
      * A basic wallet show test as user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-show
      * @return void
      */
     public function test_show_wallet_as_user()
@@ -35,7 +38,7 @@ class WalletShowTest extends TestCase
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->getJson("/api/wallet/{$wallet->id}");
+            ->get(route('api.wallets.show', [$wallet->id]));
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -53,6 +56,9 @@ class WalletShowTest extends TestCase
     /**
      * A basic wallet show test as admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-show
      * @return void
      */
     public function test_show_wallet_as_admin()
@@ -61,7 +67,7 @@ class WalletShowTest extends TestCase
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($this->admin)
-            ->getJson("/api/wallet/{$wallet->id}");
+            ->get(route('api.wallets.show', [$wallet->id]));
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -79,6 +85,9 @@ class WalletShowTest extends TestCase
     /**
      * A basic wallet show test as unauthorized user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-show
      * @return void
      */
     public function test_show_wallet_as_unauthorized_user()
@@ -87,7 +96,7 @@ class WalletShowTest extends TestCase
         $wallet = Wallet::factory()->create();
 
         $response = $this->actingAs($user)
-            ->getJson("/api/wallet/{$wallet->id}");
+            ->get(route('api.wallets.show', [$wallet->id]));
 
         $response->assertStatus(403);
     }

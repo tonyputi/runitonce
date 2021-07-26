@@ -27,6 +27,9 @@ class WalletUpdateTest extends TestCase
     /**
      * A basic wallet update test as user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-update
      * @return void
      */
     public function test_update_wallet_as_user()
@@ -37,7 +40,7 @@ class WalletUpdateTest extends TestCase
         ]);
 
         $response = $this->actingAs($user, 'sanctum')
-            ->putJson("/api/wallet/{$wallet->id}", [
+            ->put(route('api.wallets.update', [$wallet->id]), [
                 'name' => 'My brand new wallet',
                 'is_active' => true
             ]);
@@ -59,6 +62,9 @@ class WalletUpdateTest extends TestCase
     /**
      * A basic wallet update test as admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-update 
      * @return void
      */
     public function test_update_wallet_as_admin()
@@ -69,7 +75,7 @@ class WalletUpdateTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->putJson("/api/wallet/{$wallet->id}", [
+            ->put(route('api.wallets.update', [$wallet->id]), [
                 'name' => 'My second brand new wallet',
                 'is_active' => false
             ]);
@@ -91,6 +97,9 @@ class WalletUpdateTest extends TestCase
     /**
      * A basic wallet update test as unauthorized admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-update
      * @return void
      */
     public function test_update_wallet_as_unauthorized_admin()
@@ -99,7 +108,7 @@ class WalletUpdateTest extends TestCase
         $wallet = Wallet::factory()->create();
 
         $response = $this->actingAs($user, 'sanctum')
-            ->putJson("/api/wallet/{$wallet->id}", [
+            ->put(route('api.wallets.update', [$wallet->id]), [
                 'name' => 'My third brand new wallet',
                 'is_active' => false
             ]);

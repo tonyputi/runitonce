@@ -86,7 +86,7 @@
 
         methods: {
             submit() {
-                this.form.post(this.route('register'), {
+                this.form.post(this.route('api.register'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),
                 })
             }

@@ -26,6 +26,9 @@ class WalletCreateTest extends TestCase
     /**
      * A basic wallet show test as user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-create
      * @return void
      */
     public function test_create_wallet_as_user()
@@ -33,7 +36,7 @@ class WalletCreateTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->postJson('/api/wallet', [
+            ->post(route('api.wallets.store'), [
                 'name' => 'My wallet 1',
                 'is_active' => true
             ]);
@@ -54,6 +57,9 @@ class WalletCreateTest extends TestCase
     /**
      * A basic wallet show test as admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-create
      * @return void
      */
     public function test_create_wallet_as_admin()
@@ -61,7 +67,7 @@ class WalletCreateTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($this->admin)
-            ->postJson('/api/wallet', [
+            ->post(route('api.wallets.store'), [
                 'user_id' => $user->id,
                 'name' => 'My wallet 2',
                 'is_active' => true

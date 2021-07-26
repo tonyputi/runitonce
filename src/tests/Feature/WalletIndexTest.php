@@ -27,6 +27,9 @@ class WalletIndexTest extends TestCase
     /**
      * A basic wallet index test as user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-index
      * @return void
      */
     public function test_index_wallet_as_user()
@@ -35,7 +38,7 @@ class WalletIndexTest extends TestCase
         Wallet::factory(3)->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)
-            ->getJson('/api/wallet');
+            ->get(route('api.wallets.index'));
 
         $response->assertStatus(200)
             ->assertJsonCount(3, 'data')
@@ -56,6 +59,9 @@ class WalletIndexTest extends TestCase
     /**
      * A basic wallet index test as admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-index
      * @return void
      */
     public function test_index_wallet_as_admin()
@@ -65,7 +71,7 @@ class WalletIndexTest extends TestCase
         });
         
         $response = $this->actingAs($this->admin)
-            ->getJson('/api/wallet');
+            ->get(route('api.wallets.index'));
 
         $response->assertStatus(200)
             ->assertJsonCount(6, 'data')

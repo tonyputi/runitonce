@@ -32,6 +32,7 @@ Password: `12345678`
 Username: `user@runitonce.com`
 Password: `12345678`
 
+Other users are available and generated via faker so you can retrieve the email from database connection
 
 ## Run the unit test
 
@@ -39,5 +40,14 @@ Type `make test` to run the unit test already present to the project
 
 ## Build documentation
 
-- profile page should work also for other users
+## Known issue
+
+- show someting when empty data on tables
+- delete inside detail page is not redirect back to index
 - notification system for some operations
+- when deleting from page different than 1 we are render back the page 1 anyways
+- profile page should work also for other users
+- user show is missed for user admin
+- remove npm from docker file
+- export postman collection
+- laravel dusk test are missed

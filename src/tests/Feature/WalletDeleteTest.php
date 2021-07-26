@@ -27,6 +27,9 @@ class WalletDeleteTest extends TestCase
     /**
      * A basic wallet show test as user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-delete
      * @return void
      */
     public function test_delete_wallet_as_user()
@@ -35,7 +38,7 @@ class WalletDeleteTest extends TestCase
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user, 'sanctum')
-            ->deleteJson("/api/wallet/{$wallet->id}");
+            ->delete(route('api.wallets.destroy', [$wallet->id]));
 
         $response->assertStatus(204);
     }
@@ -43,6 +46,9 @@ class WalletDeleteTest extends TestCase
     /**
      * A basic wallet show test as admin
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-delete
      * @return void
      */
     public function test_delete_wallet_as_admin()
@@ -51,7 +57,7 @@ class WalletDeleteTest extends TestCase
         $wallet = Wallet::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($this->admin, 'sanctum')
-            ->deleteJson("/api/wallet/{$wallet->id}");
+            ->delete(route('api.wallets.destroy', [$wallet->id]));
 
         $response->assertStatus(204);
     }
@@ -59,6 +65,9 @@ class WalletDeleteTest extends TestCase
     /**
      * A basic wallet show test as unauthorized user
      *
+     * @group runitonce
+     * @group wallet
+     * @group wallet-delete
      * @return void
      */
     public function test_delete_wallet_as_unauthorized_user()
@@ -67,7 +76,7 @@ class WalletDeleteTest extends TestCase
         $wallet = Wallet::factory()->create();
 
         $response = $this->actingAs($user, 'sanctum')
-            ->deleteJson("/api/wallet/{$wallet->id}");
+            ->delete(route('api.wallets.destroy', [$wallet->id]));
 
         $response->assertStatus(403);
     }

@@ -29,6 +29,10 @@ init:
 
 test:
 	$(info Make: Starting environment tests.)
+	docker exec -u www-data $(CONTAINER) php artisan test --group runitonce
+
+testall:
+	$(info Make: Starting environment tests.)
 	docker exec -u www-data $(CONTAINER) php artisan test
 
 shell:
