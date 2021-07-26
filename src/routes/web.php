@@ -24,6 +24,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/error/{code}', fn ($code) => Inertia::render('Error', compact('code')))->name('error');
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/users', fn () => Inertia::render('User/Index'))->name('users.index');

@@ -27,8 +27,10 @@ import AppLayout from '@/Layouts/AppLayout'
 import JetSectionBorder from '@/Jetstream/SectionBorder'
 import UpdateResourceForm from './UpdateResourceForm'
 import DeleteResourceForm from './DeleteResourceForm'
+import InteractWithResource from '@/mixins/InteractWithResource'
 
 export default {
+    mixins: [InteractWithResource],
     components: {
         AppLayout,
         JetSectionBorder,
@@ -48,6 +50,9 @@ export default {
     },
 
     computed: {
+        endpoint() {
+            return route('api.wallets.show', [route().params.wallet])
+        },
         isCreating() {
             return route().params.wallet === 'create'
         },
@@ -56,15 +61,7 @@ export default {
         }
     },
 
-    methods: {
-        fetch() {
-            axios.get(route('api.wallets.show', [route().params.wallet])).then((response) => {
-                this.resource = response.data.data
-            })
-        }
-    },
-
-    mounted() {
+    created() {
         if(!this.isCreating) {
             this.fetch()
         }

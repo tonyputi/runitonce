@@ -1554,8 +1554,27 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
+.bg-blue-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+}
+.bg-yellow-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(245, 158, 11, var(--tw-bg-opacity));
+}
+.bg-green-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(16, 185, 129, var(--tw-bg-opacity));
+}
+.bg-red-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
+}
+.fill-current {
+	fill: currentColor;
 }
 .object-cover {
 	-o-object-fit: cover;
@@ -1569,6 +1588,9 @@ select {
 }
 .p-3 {
 	padding: 0.75rem;
+}
+.p-4 {
+	padding: 1rem;
 }
 .px-4 {
 	padding-left: 1rem;

@@ -1,10 +1,10 @@
 <template>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex my-4">
-            <jet-search-input v-model="search" @input="fetch(1)" placeholder="Search user" />
+            <jet-search-input v-model="search" @input="fetch()" placeholder="Search user" />
         </div>
 
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div v-if="hasRecords" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <jet-table class="text-sm">
                 <template #header>
                     <tr class="border-b">
@@ -22,7 +22,7 @@
                 </template>
 
                 <template #body>
-                    <tr v-for="user in users" :key="user.id" class="border border-black-600">
+                    <tr v-for="user in collection" :key="user.id" class="border border-black-600">
                         <td class="px-2 py-4 text-center">
                             <jet-checkbox :value="user" v-model:checked="collectionSelected" />
                         </td>
@@ -57,6 +57,11 @@
             <jet-pagination v-bind="meta" @change="fetch($event)" />
         </div>
 
+        <!-- no result alert -->
+        <jet-alert v-else alertStyle="warning">
+            <p>Ooops! No wallets to show. Create one or change search criteria if any</p>
+        </jet-alert>
+
         <!-- resource delete modal -->
         <delete-resource-modal
             :resource="resourceBeingDeleted"
@@ -70,63 +75,34 @@
     import JetTable from '@/Jetstream/Table'
     import JetPagination from '@/Jetstream/Pagination'
     import JetBadge from '@/Jetstream/Badge'
+    import JetAlert from '@/Jetstream/Alert'
     import JetCheckbox from '@/Jetstream/Checkbox'
     import DeleteResourceModal from './DeleteResourceModal';
     import { EyeIcon, TrashIcon } from '@heroicons/vue/outline'
+    import InteractWithCollection from "@/mixins/InteractWithCollection"
 
 
     export default {
+        mixins: [InteractWithCollection],
         components: {
             JetSearchInput,
             JetTable,
             JetPagination,
             JetCheckbox,
             JetBadge,
+            JetAlert,
             EyeIcon,
             TrashIcon,
             DeleteResourceModal
         },
 
-        data() {
-            return {
-                users: [],
-                meta: null,
-                search: null,
-                resourceBeingDeleted: null,
-                collectionSelected: []
-            }
-        },
-
-        mounted() {
-            this.fetch()
-        },
-
         computed: {
-            selectAll: {
-                get() {
-                    return this.users ? this.collectionSelected.length == this.users.length : false;
-                },
-                set(value) {
-                    (value) ? this.collectionSelected = this.users : this.collectionSelected = [];
-                }
+            endpoint() {
+                return this.route('api.users.index')
             }
         },
 
         methods: {
-            fetch(page = 1) {
-                let config = {
-                    params: {
-                        page: page,
-                        search: this.search
-                    }
-                }
-
-                axios.get(this.route('api.users.index'), config).then((response) => {
-                    this.users = response.data.data
-                    this.meta = response.data.meta
-                })
-            },
-
             canView(user) {
                 return this.$page.props.user.is_admin || this.$page.props.user.id == user.id
             },

@@ -97,9 +97,7 @@ export default {
             return this.current_page == page;
         },
         change(page) {
-            console.log(page);
             this.$emit('change', page)
-            return false
         }
     }
 };

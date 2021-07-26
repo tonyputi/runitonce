@@ -37,7 +37,7 @@ export default {
 
     methods: {
         deleteResource() {
-            axios.delete(route('api.wallet.destroy', [this.resource.id])).then((response) => {
+            axios.delete(route('api.wallets.destroy', [this.resource.id])).then((response) => {
                 this.$emit('change')
                 this.closeModal()
             })

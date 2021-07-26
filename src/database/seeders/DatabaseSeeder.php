@@ -18,14 +18,12 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->admin()->create([
             'name' => 'Admin user',
-            'email' => 'admin@runitonce.com',
-            'password' => Hash::make('12345678')
+            'email' => 'admin@runitonce.com'
         ]);
 
         $user = User::factory()->create([
             'name' => 'Standard user',
-            'email' => 'user@runitonce.com',
-            'password' => Hash::make('12345678')
+            'email' => 'user@runitonce.com'
         ]);
         Wallet::factory(3)->for($user)->create();
 

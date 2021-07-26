@@ -122,13 +122,13 @@
         methods: {
             updateOrCreate() {
                 if(this.resource.id) {
-                    axios.put(route('api.wallet.update', [this.resource.id]), this.resource)
+                    axios.put(route('api.wallets.update', [this.resource.id]), this.resource)
                         .then((response) => {
                             this.recentlySuccessful = true
                         });
 
                 } else {
-                    axios.post(route('api.wallet.store'), this.resource)
+                    axios.post(route('api.wallets.store'), this.resource)
                         .then((response) => {
                             this.recentlySuccessful = true
                             this.$inertia.visit(route('wallets.index'))
