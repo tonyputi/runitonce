@@ -13,7 +13,7 @@
                 Nevermind
             </jet-secondary-button>
 
-            <jet-danger-button class="ml-2" @click="deleteResource">
+            <jet-danger-button class="ml-2" @click="deleteResource" dusk="confirm-delete-button">
                 Delete
             </jet-danger-button>
         </template>

@@ -19,7 +19,7 @@ The application is making use the following `Laravel` features
     - Model resources to standardize the json response for better handling
     - Model factories to seed database during unit tests
     - Unit test to test api via http request
-    - Dusk to make browser tests
+    - Dusk to make browser QA tests (register, login and wallets)
     - Custom casts to convert euro-cents to euro
     - Jetstream a starter kit for SPA
 
@@ -32,8 +32,8 @@ The application is making use the following `Laravel` features
 ## Installation
 
 1. Type `make build` to build the docker image
-2. Type `make start` to start the docker containers
-3. Type `make init` to initialize the application container (only the first time is requried)
+2. Type `make start` to start the docker containers and wait few seconds to let containers proper start
+3. Type `make init` to initialize the application container (only the first time is required)
 
 The `make init` command will lunch `composer install` and `php artisan migrate refresh --seed`
 
@@ -60,6 +60,8 @@ the password for all the seeder user is `password`
 ## Run the unit test
 
 Type `make test` to run the unit test already present to the project
+Type `make dusk` to run the dusk test already present to the project
+Type `make testall` to run all the unit and dusk present to the project
 
 ## Postman
 
@@ -82,7 +84,4 @@ You can access code documentation at http://localhost:8000/docs/index.html
 ## Known issue and improvements
 
 - put some color on landing pages
-- make tests
-- profile page should work also for other users
-- laravel dusk test are missed
 - review the code

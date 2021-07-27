@@ -37,25 +37,18 @@ test:
 	$(info Make: Starting environment tests.)
 	docker exec -u www-data $(CONTAINER) php artisan test --group runitonce
 
+dusk:
+	$(info Make: Starting environment dusk tests.)
+	docker exec -u www-data $(CONTAINER) php artisan dusk
+
 testall:
 	$(info Make: Starting environment tests.)
 	docker exec -u www-data $(CONTAINER) php artisan test
+	docker exec -u www-data $(CONTAINER) php artisan dusk
 
 shell:
 	$(info Make: Starting environment shell.)
 	docker exec -u www-data -it $(CONTAINER) sh
 
-push:
-	$(info Make: Pushing tagged image.)
-	@docker push runitonce:latest
- 
-pull:
-	$(info Make: Pulling latest tagged image.)
-	@docker pull runitonce:latest
- 
 clean:
 	@docker system prune --volumes --force
- 
-login:
-	$(info Make: Login to Docker Hub.)
-	@docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)

@@ -30,7 +30,7 @@
                         <td class="px-2 py-4 text-center">
                             <jet-checkbox :value="wallet" v-model:checked="collectionSelected" />
                         </td>
-                        <td class="p-3 text-left">{{ wallet.id }}</td>
+                        <td class="p-3 text-left" :dusk="`${wallet.id}-row`">{{ wallet.id }}</td>
                         <td class="p-3" v-if="$page.props.user.is_admin">
                             <jet-nav-link :href="route('users.show', [wallet.user.id])">
                                 {{ wallet.user.name }}
@@ -44,11 +44,11 @@
                         <td class="p-3 text-center">{{ wallet.updated_at }}</td>
                         <td class="p-3">
                             <div class="inline-flex items-center">
-                                <inertia-link :href="route('wallets.show', wallet.id)"
+                                <inertia-link :href="route('wallets.show', wallet.id)" :dusk="`${wallet.id}-view-button`"
                                     class="inline-flex cursor-pointer text-70 hover:text-primary mr-3">
                                     <EyeIcon class="h-6 w-6" />
                                 </inertia-link >
-                                <button @click="resourceBeingDeleted=wallet"
+                                <button @click="resourceBeingDeleted=wallet" :dusk="`${wallet.id}-delete-button`"
                                     class="inline-flex appearance-none cursor-pointer hover:text-primary mr-3">
                                     <TrashIcon class="h-6 w-6" />
                                 </button>
@@ -105,7 +105,7 @@
 
         computed: {
             endpoint() {
-                return (route().params.user) 
+                return (route().params.user)
                     ? route('api.users.wallets.index', [route().params.user])
                     : route('api.wallets.index')
             }
@@ -115,7 +115,7 @@
             updateWallet(wallet) {
                 axios.put(route('api.wallets.update', [wallet.id]), wallet).then(response => {
                     this.toast.success('Operation success');
-                }); 
+                });
             }
         }
     }

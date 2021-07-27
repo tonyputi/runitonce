@@ -12,7 +12,7 @@
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full"
+                <jet-input id="name" type="text" class="mt-1 block w-full" dusk="name"
                     v-model="resource.name" :disabled="!canUpdateOrCreate" />
                 <jet-input-error :message="errors.name" class="mt-2" />
             </div>
@@ -27,7 +27,7 @@
             <!-- Balance -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="balance" value="Balance" />
-                <jet-input id="balance" type="text" class="mt-1 block w-full"
+                <jet-input id="balance" type="text" class="mt-1 block w-full" dusk="balance"
                     v-model="resource.balance" :disabled="!$page.props.user.is_admin" />
                 <jet-input-error :message="errors.balance" class="mt-2" />
             </div>
@@ -35,7 +35,7 @@
             <!-- Is active -->
             <div class="col-span-6 sm:col-span-4 mt-2">
                 <jet-label for="is_active" value="Is active" />
-                <jet-checkbox id="is_active" v-model:checked="resource.is_active" ref="is_active" />
+                <jet-checkbox id="is_active" v-model:checked="resource.is_active" ref="is_active" dusk="is_active" />
                 <jet-input-error :message="errors.is_active" class="mt-2" />
             </div>
         </template>
@@ -45,13 +45,9 @@
                 Saved.
             </jet-action-message>
 
-            <jet-button>
+            <jet-button dusk="save-button">
                 Save
             </jet-button>
-
-            <!-- <jet-button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </jet-button> -->
         </template>
     </jet-form-section>
 </template>
