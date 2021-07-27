@@ -1,5 +1,6 @@
 UID := $(shell id -u)
 GID := $(shell id -g)
+DOCTUM_URL := "https://doctum.long-term.support/releases/latest/doctum.phar"
 CONTAINER := "runitonce-php"
 
 build:
@@ -26,6 +27,11 @@ init:
 	docker exec -u www-data $(CONTAINER) composer install
 	docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed
 	docker exec -u www-data $(CONTAINER) php artisan key:generate
+	docker exec -u www-data $(CONTAINER) curl -O $(DOCTUM_URL)
+
+doc:
+	$(info Make: Generate application documentation.)
+	docker exec -u www-data $(CONTAINER) php doctum.phar render doctum.config.php --force
 
 test:
 	$(info Make: Starting environment tests.)

@@ -19,6 +19,7 @@ The application is making use the following `Laravel` features
     - Model resources to standardize the json response for better handling
     - Model factories to seed database during unit tests
     - Unit test to test api via http request
+    - Dusk to make browser tests
     - Custom casts to convert euro-cents to euro
     - Jetstream a starter kit for SPA
 
@@ -38,8 +39,10 @@ The `make init` command will lunch `composer install` and `php artisan migrate r
 
 ## Testing the application
 
-Access the address `http://localhost:8000` from your browser.
-The step number 3 will ensure that fake data is present on the db in order to test the application
+You can access the address `http://localhost:8000` from your browser.
+The installation step 3 will ensure that fake data is present on the db in order to test the application.
+
+You can access the address `http://localhost:8025` from your browser to access `mailhog` mail panel.
 
 ### Super admin access
 
@@ -78,6 +81,7 @@ You can access code documentation at http://localhost:8000/docs/index.html
 
 ## Known issue and improvements
 
+- put some color on landing pages
 - make tests
 - profile page should work also for other users
 - laravel dusk test are missed
