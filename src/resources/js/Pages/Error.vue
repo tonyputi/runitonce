@@ -19,16 +19,18 @@
                 return {
                     503: 'Service Unavailable',
                     500: 'Server Error',
-                    404: 'Page Not Found',
+                    401: 'Unauthorized',
                     403: 'Forbidden',
+                    404: 'Page Not Found'
                 }[this.code]
             },
             description() {
                 return {
                     503: 'Sorry, we are doing some maintenance. Please check back soon.',
                     500: 'Whoops, something went wrong on our servers.',
-                    404: 'Sorry, the page you are looking for could not be found.',
+                    401: 'Sorry, you are forbidden from accessing this page.',
                     403: 'Sorry, you are forbidden from accessing this page.',
+                    404: 'Sorry, the page you are looking for could not be found.'
                 }[this.code]
             },
         },

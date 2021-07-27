@@ -2,6 +2,7 @@ FROM nomadnt/php-8-alpine
 
 ARG UID
 ARG GID
+ARG NODE
 
 RUN if [ ${UID:-0} -ne 0 ] && [ ${GID:-0} -ne 0 ]; then \
     deluser www-data \
@@ -10,8 +11,8 @@ RUN if [ ${UID:-0} -ne 0 ] && [ ${GID:-0} -ne 0 ]; then \
 	&& adduser www-data www-data \
 ;fi
 
-# add npm
-RUN apk update --no-cache && apk add npm
+# install npm if required
+RUN if [ "$NODE" = "true" ] ; then apk update --no-cache && apk add npm; fi
 
 # turn on app scheduler
 RUN echo "* * * * * cd /app && php artisan schedule:run >> /dev/null 2>&1" > /etc/crontabs/www-data

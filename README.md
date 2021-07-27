@@ -9,6 +9,7 @@ We know that it is possilble to use custom authentication solution but why we ha
 when `Laravel` is already providing many ways to authenticate a user via SPA and consume api? So I decided
 to use `Laravel Sancutm` rather than `Laravel Passport` and make use of `axios` library to consume the apis
 from the frontend application. I've also choose to use my own custom docker image rather than `Laravel Sail`.
+The purpose to use custom docker image and configuration is just to show the level expirience with `Docker`
 
 The application is making use the following `Laravel` features
     - Sanctum to authenticate api calls
@@ -81,4 +82,3 @@ You can access code documentation at http://localhost:8000/docs/index.html
 - profile page should work also for other users
 - laravel dusk test are missed
 - review the code
-- remove npm from docker file
