@@ -12,7 +12,7 @@ services:
         working_dir: /app
         volumes:
             - ./src:/app
-            # - ./docker/php/supervisor.ini:/etc/supervisor.d/runitonce.ini
+            - ./docker/php/supervisor.ini:/etc/supervisor.d/runitonce.ini
         # environment:
             # XDEBUG_MODE: debug
             # XDEBUG_CONFIG: start_with_request=yes discover_client_host=yes log=/tmp/xdebug.log

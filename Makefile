@@ -25,7 +25,7 @@ init:
 	$(info Make: Initializing environment.)
 	docker exec -u www-data $(CONTAINER) cp .env.example .env
 	docker exec -u www-data $(CONTAINER) composer install
-	docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed
+	docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed --force
 	docker exec -u www-data $(CONTAINER) php artisan key:generate
 	docker exec -u www-data $(CONTAINER) curl -O $(DOCTUM_URL)
 
