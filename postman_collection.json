@@ -303,7 +303,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8000/api/wallets",
+					"raw": "http://localhost:8000/api/wallets/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -311,7 +311,8 @@
 					"port": "8000",
 					"path": [
 						"api",
-						"wallets"
+						"wallets",
+						"2"
 					]
 				}
 			},

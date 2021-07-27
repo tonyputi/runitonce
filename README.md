@@ -8,7 +8,7 @@ application that will consume that apis. More info at `assignment-202107.docx`
 We know that it is possilble to use custom authentication solution but why we have to reinvent the wheel
 when `Laravel` is already providing many ways to authenticate a user via SPA and consume api? So I decided
 to use `Laravel Sancutm` rather than `Laravel Passport` and make use of `axios` library to consume the apis
-from the frontend application.
+from the frontend application. I've also choose to use my own custom docker image rather than `Laravel Sail`.
 
 The application is making use the following `Laravel` features
     - Sanctum to authenticate api calls
@@ -20,20 +20,6 @@ The application is making use the following `Laravel` features
     - Unit test to test api via http request
     - Custom casts to convert euro-cents to euro
     - Jetstream a starter kit for SPA
-
-### Postman
-
-Also a `postman_collection.json` file is provided in order to test the api by postman
-You can also add the following test script to your `login` api request in order to save 
-the `token` as variable inside your postman collection and use it for all subsequents
-calls:
-
-```javascript
-if (responseCode.code === 200) {
-    var response = pm.response.text();
-    pm.collectionVariables.set('token', response);
-}
-```
 
 ## Requirements
 
@@ -71,12 +57,28 @@ the password for all the seeder user is `password`
 
 Type `make test` to run the unit test already present to the project
 
-## Build documentation
+## Postman
 
-## Known issue
+Also a `postman_collection.json` file is provided in order to test the api by postman
+You can also add the following test script to your `login` api request in order to save 
+the `token` as variable inside your postman collection and use it for all subsequents
+calls:
 
+```javascript
+if (responseCode.code === 200) {
+    var response = pm.response.text();
+    pm.collectionVariables.set('token', response);
+}
+```
+
+## Documentation
+
+You can access code documentation at http://localhost:8000/docs/index.html
+
+## Known issue and improvements
+
+- make tests
 - profile page should work also for other users
 - laravel dusk test are missed
 - review the code
-
 - remove npm from docker file
