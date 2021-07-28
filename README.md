@@ -82,6 +82,3 @@ if (responseCode.code === 200) {
 You can access code documentation at http://localhost:8000/docs/index.html
 
 ## Known issue and improvements
-
-- put some color on landing pages
-- review the code
