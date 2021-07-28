@@ -39,6 +39,7 @@ test:
 
 dusk:
 	$(info Make: Starting environment dusk tests.)
+	docker exec -u www-data $(CONTAINER) touch database/database.sqlite
 	docker exec -u www-data $(CONTAINER) php artisan dusk
 
 testall:
