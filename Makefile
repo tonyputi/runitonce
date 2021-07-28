@@ -23,33 +23,33 @@ restart:
 
 init:
 	$(info Make: Initializing environment.)
-	docker exec -u www-data $(CONTAINER) cp .env.example .env
-	docker exec -u www-data $(CONTAINER) composer install
-	docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed --force
-	docker exec -u www-data $(CONTAINER) php artisan key:generate
-	docker exec -u www-data $(CONTAINER) curl -O $(DOCTUM_URL)
+	@docker exec -u www-data $(CONTAINER) cp .env.example .env
+	@docker exec -u www-data $(CONTAINER) composer install
+	@docker exec -u www-data $(CONTAINER) php artisan migrate:refresh --seed --force
+	@docker exec -u www-data $(CONTAINER) php artisan key:generate
+	@docker exec -u www-data $(CONTAINER) curl -O $(DOCTUM_URL)
 
-doc:
+docs:
 	$(info Make: Generate application documentation.)
-	docker exec -u www-data $(CONTAINER) php doctum.phar render doctum.config.php --force
+	@docker exec -u www-data $(CONTAINER) php doctum.phar render doctum.config.php --force
 
 test:
 	$(info Make: Starting environment tests.)
-	docker exec -u www-data $(CONTAINER) php artisan test --group runitonce
+	@docker exec -u www-data $(CONTAINER) php artisan test
 
 dusk:
 	$(info Make: Starting environment dusk tests.)
-	docker exec -u www-data $(CONTAINER) touch database/database.sqlite
-	docker exec -u www-data $(CONTAINER) php artisan dusk
+	@docker exec -u www-data $(CONTAINER) touch database/database.sqlite
+	@docker exec -u www-data $(CONTAINER) php artisan dusk
 
 testall:
-	$(info Make: Starting environment tests.)
-	docker exec -u www-data $(CONTAINER) php artisan test
-	docker exec -u www-data $(CONTAINER) php artisan dusk
+	$(info Make: Starting environment full tests.)
+	@docker exec -u www-data $(CONTAINER) php artisan test
+	@docker exec -u www-data $(CONTAINER) php artisan dusk
 
 shell:
 	$(info Make: Starting environment shell.)
-	docker exec -u www-data -it $(CONTAINER) sh
+	@docker exec -u www-data -it $(CONTAINER) sh
 
 clean:
 	@docker system prune --volumes --force
