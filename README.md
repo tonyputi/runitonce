@@ -40,10 +40,10 @@ The `make init` command will lunch `composer install` and `php artisan migrate r
 
 ## Testing the application
 
-Access the [address](http://localhost:8000) from your browser.
+Access the address [http://localhost:8000](http://localhost:8000) from your browser.
 The installation `step 3` will ensure that fake data is present on the db in order to test the application.
 
-Access the [address](http://localhost:8025) from your browser to access `mailhog` mail panel.
+Access the address [http://localhost:8025](http://localhost:8025) from your browser to access `mailhog` mail panel.
 
 ### Super admin access
 
