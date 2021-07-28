@@ -35,7 +35,7 @@ docs:
 
 test:
 	$(info Make: Starting environment tests.)
-	@docker exec -u www-data $(CONTAINER) php artisan test
+	@docker exec -u www-data $(CONTAINER) php artisan test --group runitonce
 
 dusk:
 	$(info Make: Starting environment dusk tests.)
