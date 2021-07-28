@@ -3,7 +3,7 @@
 ## Preface
 
 The purpose of the assignement is to create a bunch of api to manage the player wallets and a frontend
-application that will consume that apis. More info at [assignment-202107.docx](./assignment-202107.docx)
+application that will consume that apis. More info can be found [here](./assignment-202107.docx)
 
 I know that it is possible to use custom authentication solution but why we have to reinvent the wheel when `Laravel` 
 is already providing many ways to authenticate a user via SPA and consume REST APIs safely? So I decided to use 
@@ -40,10 +40,10 @@ The `make init` command will lunch `composer install` and `php artisan migrate r
 
 ## Testing the application
 
-Access the address [http://localhost:8000](http://localhost:8000) from your browser.
+Access the [address](http://localhost:8000) from your browser.
 The installation `step 3` will ensure that fake data is present on the db in order to test the application.
 
-Access the address [http://localhost:8025](http://localhost:8025) from your browser to access `mailhog` mail panel.
+Access the [address](http://localhost:8025) from your browser to access `mailhog` mail panel.
 
 ### Super admin access
 
@@ -79,7 +79,7 @@ if (responseCode.code === 200) {
 
 ## Documentation
 
-You can access code documentation at [http://localhost:8000/docs/index.html](http://localhost:8000/docs/index.html)
+You can access the code documentation [here](http://localhost:8000/docs/index.html)
 
 ## Available `make` commands list
 
