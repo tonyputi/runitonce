@@ -60,9 +60,9 @@ the password for all the seeder user is `password`
 
 ## Run the unit test
 
-- Type `make test` to run the unit test already present to the project
-- Type `make dusk` to run the dusk test already present to the project
-- Type `make testall` to run all the unit and dusk present to the project
+- Type `make test` to run the unit tests;
+- Type `make dusk` to run the browser automation tests;
+- Type `make testall` to run all the unit and dusk tests (laravel default ones included)
 
 ## Postman
 
